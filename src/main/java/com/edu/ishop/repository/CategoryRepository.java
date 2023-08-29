@@ -3,8 +3,9 @@ package com.edu.ishop.repository;
 import com.edu.ishop.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CategoryRepository extends JpaRepository<Category, Integer>{
+public interface CategoryRepository extends JpaRepository<Category, Integer> {
     Category findByName(String name);
+
     Category findByUrl(String url);
 }
 
