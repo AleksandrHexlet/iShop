@@ -19,16 +19,14 @@ public class Category {
     private List<Category> children = new ArrayList<>();
 
 
-
-    public Category(String name, String url,Category parentOUT) {
+    public Category(String name, String url, Category parentOUT) {
 
         this.name = name;
         this.url = url;
         this.parent = parentOUT;
     }
 
-    public Category() {
-
+    protected Category() {
     }
 
 }
