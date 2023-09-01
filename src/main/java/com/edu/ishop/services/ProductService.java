@@ -26,19 +26,18 @@ public class ProductService {
     }
 
     public List<Product> getProduct() {
-        Product milk = new Product("milk", "meal", "http://milk.com", categoryService.dairyProducts);
-        Product hamburger = new Product("hamburger", "hamburger", "http://hamburger.com", categoryService.readyMadeFood);
+        Product milk = new Product("milk", "http://milk.com", categoryService.dairyProducts);
+        Product hamburger = new Product("hamburger", "http://hamburger.com", categoryService.readyMadeFood);
 
-        Product washingMachine = new Product("washingMachine", "washingMachine", "http://washingMachine.com", categoryService.homeAppliances);
-        Product Iphone19 = new Product("Iphone19", "Iphone19", "http://Iphone19.com", categoryService.electronic);
+        Product washingMachine = new Product("washingMachine", "http://washingMachine.com", categoryService.homeAppliances);
+        Product Iphone19 = new Product("Iphone19", "http://Iphone19.com", categoryService.electronic);
 
-        Product orange = new Product("orange", "orange", "http://orange.com", categoryService.healthyFood);
-        Product carrot = new Product("carrot", "carrot", "http://carrot.com", categoryService.healthyFood);
+        Product orange = new Product("orange", "http://orange.com", categoryService.healthyFood);
+        Product carrot = new Product("carrot", "http://carrot.com", categoryService.healthyFood);
 
-        Product sportsShoes = new Product("sportsShoes", "sportsShoes", "http://sportsShoes.com", categoryService.sport);
+        Product sportsShoes = new Product("sportsShoes", "http://sportsShoes.com", categoryService.sport);
 
-        Product sportsTrousers = new Product("sportsTrousers", "sportsTrousers", "http://sportsTrousers.com", categoryService.sport);
-
+        Product sportsTrousers = new Product("sportsTrousers", "http://sportsTrousers.com", categoryService.sport);
 
         List<Product> productList = new ArrayList<>();
         productList.add(milk);
@@ -52,6 +51,21 @@ public class ProductService {
         return productList;
     }
 
+
+    public List<Product> getProductList(String url) {
+        return productRepository.findByCategoryProductUrl(url);
+    }
+
+    public List<Product> getProductsByParams(String name, String image) {
+
+//        return productRepository.getProductsByNameAndImage(name,image);
+        List<Product> productList = productRepository.getProductsByNameAndImage(name, image);
+        System.out.println("productList = " + productList);
+        return productList;
+    }
+     public List<Product> getProductListByName(String[] nameArr){
+     return productRepository.getProductsByName(nameArr);
+     }
 
     @Bean
     public CommandLineRunner createTableProduct() {

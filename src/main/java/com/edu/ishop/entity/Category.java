@@ -15,8 +15,6 @@ public class Category {
     private String url;
     @ManyToOne
     private Category parent;
-    @OneToMany(mappedBy = "parent")
-    private List<Category> children = new ArrayList<>();
 
 
     public Category(String name, String url, Category parentOUT) {
@@ -29,4 +27,13 @@ public class Category {
     protected Category() {
     }
 
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", url='" + url + '\'' +
+                ", parent=" + parent +
+                '}';
+    }
 }

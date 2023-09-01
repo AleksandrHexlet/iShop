@@ -6,33 +6,38 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-public class Product
 
-{
+@Entity
+public class Product {
     @Id
     @GeneratedValue
     private int id;
-    private String name;
-    private String url_image;
-    private String url;
+    private String nameProduct;
+    private String urlImage;
+
 
 
     @ManyToOne
-    Category parent;
+    private Category categoryProduct;
 
 //    @OneToMany(mappedBy = "parent")
 //    private List<Product> children = new ArrayList<>();
 
-    public Product() {
+    public Product() {}
+
+    public Product(String name, String url_image, Category categoryProduct) {
+        this.nameProduct = name;
+        this.urlImage = url_image;
+        this.categoryProduct = categoryProduct;
     }
 
-    public Product(String name, String url,String url_image, Category parent) {
-        this.id = id;
-        this.name = name;
-        this.url_image = url_image;
-        this.url = url;
-        this.parent = parent;
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", nameProduct='" + nameProduct + '\'' +
+                ", urlImage='" + urlImage + '\'' +
+                ", categoryProduct=" + categoryProduct +
+                '}';
     }
-
 }
