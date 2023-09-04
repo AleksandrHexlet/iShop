@@ -10,9 +10,12 @@ public class Category {
     @Id
     @GeneratedValue
     private int id;
+    @Column(nullable = false,length = 3456)
     private String name;
+    @Column(unique = true,nullable = false,columnDefinition = "url TEXT NOT NULL")
     private String url;
     @ManyToOne
+    @Column(nullable = false)
     private Category parent;
 
 

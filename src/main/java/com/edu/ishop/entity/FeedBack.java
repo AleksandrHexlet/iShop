@@ -1,9 +1,6 @@
 package com.edu.ishop.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
@@ -14,19 +11,21 @@ public class FeedBack {
 
     @Id
     @GeneratedValue
-    int id;
-    ZonedDateTime timeAdded;
-    String text;
+    private int id;
+    private ZonedDateTime timeAdded;
+    @Column(nullable = false)
+    private String text;
 
-    @OneToOne
-    Product product;
+    @ManyToOne
+    @Column(nullable = false)
+    private Product product;
 
     public FeedBack() {
     }
 
-    public FeedBack(ZonedDateTime timeAdded, String text, Product product) {
+    public FeedBack(String text, Product product) {
 
-        this.timeAdded = timeAdded;
+        this.timeAdded = ZonedDateTime.now();
         this.text = text;
         this.product = product;
     }

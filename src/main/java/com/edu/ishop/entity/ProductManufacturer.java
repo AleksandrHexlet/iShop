@@ -4,29 +4,25 @@ import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
 @Entity
-@Component
+@IdClass(ProductManufactureId.class)
 public class ProductManufacturer {
 
-    @EmbeddedId
-    private ProductManufactureId productManufactureId;
-
+    @Id
     private String name;
+    @Id
     private String country;
     private boolean isActive;
 
     public ProductManufacturer() {
     }
 
-    public ProductManufacturer(ProductManufactureId productManufactureId, String name, String country, boolean isActive) {
-        this.productManufactureId = productManufactureId;
+    public ProductManufacturer( String name, String country, boolean isActive) {
         this.name = name;
         this.country = country;
         this.isActive = isActive;
     }
 
-    public ProductManufactureId getProductManufactureId() {
-        return productManufactureId;
-    }
+
 
     public String getName() {
         return name;

@@ -14,20 +14,26 @@ public class Product {
     @Id
     @GeneratedValue
     private int id;
+    @Column(nullable = false)
     private String nameProduct;
+
+    @Column(nullable = false)
     private String urlImage;
+    @Column(nullable = false, precision = 7, scale = 2)
     private BigDecimal price;
     private short rating;
-//    private BigDecimal price;
+    //    private BigDecimal price;
 //    private short rating;
+    @Column(nullable = false)
     private int quantityStock;
+    @Column(nullable = false)
     private LocalDate dateAdded;
 
 
     @ManyToOne
     private ProductManufacturer productManufacturer;
-    @OneToOne
-    private FeedBack feedBack;
+    @OneToMany(mappedBy = "product")
+    private List<FeedBack> feedBack;
     @ManyToOne
     private Category categoryProduct;
 
@@ -37,7 +43,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(String nameProduct, String urlImage, BigDecimal price, short rating, int quantityStock, LocalDate dateAdded, ProductManufacturer productManufacturer, FeedBack feedBack, Category categoryProduct) {
+    public Product(String nameProduct, String urlImage, BigDecimal price, short rating, int quantityStock, LocalDate dateAdded, ProductManufacturer productManufacturer, Category categoryProduct) {
 
         this.nameProduct = nameProduct;
         this.urlImage = urlImage;
@@ -46,10 +52,13 @@ public class Product {
         this.quantityStock = quantityStock;
         this.dateAdded = dateAdded;
         this.productManufacturer = productManufacturer;
-        this.feedBack = feedBack;
+
         this.categoryProduct = categoryProduct;
     }
 
+    public void setFeedbackToList(FeedBack feedBackOUT) {
+        this.feedBack.add(feedBackOUT);
+    }
 
     //Геттеры необходимы, чтобы приватные поля попали в JSON и в последствии в Базу данных.
     // Если свойства у entity класса приватные и нет геттеров, они не попадут в json.
@@ -85,10 +94,6 @@ public class Product {
 
     public ProductManufacturer getProductManufacturer() {
         return productManufacturer;
-    }
-
-    public FeedBack getFeedBack() {
-        return feedBack;
     }
 
     public Category getCategoryProduct() {

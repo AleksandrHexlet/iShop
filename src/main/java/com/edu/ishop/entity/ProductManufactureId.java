@@ -1,37 +1,27 @@
 package com.edu.ishop.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.IdClass;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 
-@Embeddable
+
 public class ProductManufactureId implements Serializable {
-    private String nameId;
-    private  String countryId;
+    @Column(nullable = false)
+    private String name;
+    @Column(nullable = false)
+    private  String country;
 
-    public ProductManufactureId() { }
 
-    public ProductManufactureId(String nameId, String countryId) {
-        this.nameId = nameId;
-        this.countryId = countryId;
+    public String getName() {
+        return name;
     }
 
-    public String getNameId() {
-        return nameId;
-    }
-
-    public void setNameId(String nameId) {
-        this.nameId = nameId;
-    }
-
-    public String getCountryId() {
-        return countryId;
-    }
-
-    public void setCountryId(String countryId) {
-        this.countryId = countryId;
+    public String getCountry() {
+        return country;
     }
 
     @Override
@@ -39,12 +29,12 @@ public class ProductManufactureId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductManufactureId that = (ProductManufactureId) o;
-        return Objects.equals(nameId, that.nameId) && Objects.equals(countryId, that.countryId);
+        return Objects.equals(name, that.name) && Objects.equals(country, that.country);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nameId, countryId);
+        return Objects.hash(name, country);
     }
 }
 

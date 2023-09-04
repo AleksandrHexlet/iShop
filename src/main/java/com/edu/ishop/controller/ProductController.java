@@ -1,5 +1,6 @@
 package com.edu.ishop.controller;
 
+import com.edu.ishop.entity.FeedBack;
 import com.edu.ishop.entity.Product;
 import com.edu.ishop.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +33,10 @@ public class ProductController {
         String[] nameArr = names.split("-");
         return productService.getProductListByName(nameArr);
     }
+    @PostMapping("/feedback")
+    public FeedBack getProductsByNames(@RequestParam int idProduct, @RequestParam  String textFeedback){
+    FeedBack feedBack = productService.addFeedBackToProduct(idProduct,textFeedback);
+    return feedBack;
+    };
 }
 ///product?name=bread&image=breadImg
