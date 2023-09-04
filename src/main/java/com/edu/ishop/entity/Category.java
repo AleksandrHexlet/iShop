@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-
 public class Category {
     @Id
     @GeneratedValue
@@ -25,6 +24,24 @@ public class Category {
     }
 
     protected Category() {
+    }
+
+    //Геттеры необходимы, чтобы приватные поля попали в JSON и в последствии в Базу данных.
+    // Если свойства у entity класса приватные и нет геттеров, они не попадут в json.
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public Category getParent() {
+        return parent;
     }
 
     @Override
