@@ -17,7 +17,7 @@ public class FeedBack {
     private String text;
 
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private Product product;
 
     public FeedBack() {

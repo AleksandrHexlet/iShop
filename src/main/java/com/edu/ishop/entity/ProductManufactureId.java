@@ -8,13 +8,19 @@ import java.io.Serializable;
 import java.util.Objects;
 
 
-
 public class ProductManufactureId implements Serializable {
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
-    private  String country;
+    private String country;
 
+    public ProductManufactureId(String name, String country) {
+        this.name = name;
+        this.country = country;
+    }
+
+    public ProductManufactureId() {
+    }
 
     public String getName() {
         return name;

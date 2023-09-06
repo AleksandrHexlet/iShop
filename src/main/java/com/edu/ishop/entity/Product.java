@@ -21,7 +21,7 @@ public class Product {
     private String urlImage;
     @Column(nullable = false, precision = 7, scale = 2)
     private BigDecimal price;
-    private short rating;
+    private double rating;
     //    private BigDecimal price;
 //    private short rating;
     @Column(nullable = false)
@@ -43,7 +43,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(String nameProduct, String urlImage, BigDecimal price, short rating, int quantityStock, LocalDate dateAdded, ProductManufacturer productManufacturer, Category categoryProduct) {
+    public Product(String nameProduct, String urlImage, BigDecimal price, double rating, int quantityStock, LocalDate dateAdded, ProductManufacturer productManufacturer, Category categoryProduct) {
 
         this.nameProduct = nameProduct;
         this.urlImage = urlImage;
@@ -80,7 +80,7 @@ public class Product {
         return price;
     }
 
-    public short getRating() {
+    public double getRating() {
         return rating;
     }
 

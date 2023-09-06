@@ -6,16 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name="tb_categories")
 public class Category {
     @Id
     @GeneratedValue
     private int id;
     @Column(nullable = false,length = 3456)
     private String name;
-    @Column(unique = true,nullable = false,columnDefinition = "url TEXT NOT NULL")
+    @Column(unique = true,nullable = false,columnDefinition = "TEXT NOT NULL")
     private String url;
     @ManyToOne
-    @Column(nullable = false)
     private Category parent;
 
 
