@@ -72,7 +72,7 @@ public class ProductSpecifications {
                criteriaBuilder.equal(categoryProductJoin.get("name"),nameCategory),
                criteriaBuilder.in(ProductManufacturerCategoryJoin.get("country"),manufacturerCountries)
            );
-
+///
         };
     }
 
