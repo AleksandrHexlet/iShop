@@ -10,6 +10,8 @@ import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 //private String nameProduct;
 //
@@ -42,14 +44,14 @@ public class ProductSpecifications {
                                                                                                    int quantity,
                                                                                                    double rating) {
         return (root, query, criteriaBuilder) -> {
-            Join<ProductManufacturer,Product> productManufacturerProductJoin = root.join("productManufacturer",
+            Join<ProductManufacturer, Product> productManufacturerProductJoin = root.join("productManufacturer",
                     JoinType.LEFT);
 
             return criteriaBuilder.and(
-                    criteriaBuilder.equal(productManufacturerProductJoin.get("name"),id.getName()),
-                    criteriaBuilder.equal(productManufacturerProductJoin.get("country"),id.getCountry()),
-                    criteriaBuilder.greaterThanOrEqualTo(root.get("quantityStock"),quantity),
-                    criteriaBuilder.greaterThanOrEqualTo(root.get("rating"),rating)
+                    criteriaBuilder.equal(productManufacturerProductJoin.get("name"), id.getName()),
+                    criteriaBuilder.equal(productManufacturerProductJoin.get("country"), id.getCountry()),
+                    criteriaBuilder.greaterThanOrEqualTo(root.get("quantityStock"), quantity),
+                    criteriaBuilder.greaterThanOrEqualTo(root.get("rating"), rating)
 
 
             );
@@ -60,19 +62,32 @@ public class ProductSpecifications {
 //    товары: рейтинг выше указанного, название категории равно указанной,
 //    страна производителя (одна или несколько из указанных)
 
-    public static Specification<Category> findProductByCategoryAndCountryAndRating(
-            double rating,String nameCategory,String[] manufacturerCountries
-    ){
+    public static Specification<Product> findProductByCategoryAndCountryAndRating(
+            double rating, String nameCategory, List<String> manufacturerCountries
+    ) {
         return (root, query, criteriaBuilder) -> {
-            Join<Category,Product>categoryProductJoin = root.join("categoryProduct",JoinType.LEFT);
-            Join<ProductManufacturer,Product>ProductManufacturerCategoryJoin =
-                    categoryProductJoin.join("productManufacturer",JoinType.LEFT);
-           return criteriaBuilder.and(
-               criteriaBuilder.equal(root.get("rating"),rating),
-               criteriaBuilder.equal(categoryProductJoin.get("name"),nameCategory),
-               criteriaBuilder.in(ProductManufacturerCategoryJoin.get("country"),manufacturerCountries)
-           );
+            Join<Category, Product> categoryProductJoin = root.join("categoryProduct", JoinType.LEFT);
+            Join<ProductManufacturer, Product> ProductManufacturerCategoryJoin =
+                    root.join("productManufacturer", JoinType.LEFT);
+            return criteriaBuilder.and(
+                    criteriaBuilder.equal(root.get("rating"), rating),
+                    criteriaBuilder.equal(categoryProductJoin.get("name"), nameCategory),
+                    ProductManufacturerCategoryJoin.get("country").in(manufacturerCountries)
+            );
 ///
+        };
+    }
+
+    public static Specification<Product> findProductbyCategoryAndRatingAndDate(int categoryId, double rating, LocalDate date) {
+        return (root, query, criteriaBuilder) -> {
+            Join<Category, Product> categoryProductJoin = root.join("categoryProduct", JoinType.LEFT);
+
+            return criteriaBuilder.and(
+                    criteriaBuilder.equal(categoryProductJoin.get("id"), categoryId),
+                    criteriaBuilder.greaterThanOrEqualTo(root.get("rating"), rating),
+                    criteriaBuilder.lessThanOrEqualTo(root.get("dateAdded"), date)
+
+            );
         };
     }
 

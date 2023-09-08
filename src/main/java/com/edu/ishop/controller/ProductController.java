@@ -29,8 +29,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<Product> getProductsByCategoryName(@RequestParam String name, @RequestParam(required = false) String image) {
-        return productService.getProductsByParams(name, image);
+    public List<Product> getProductsByRandomCategoryAndRating() {
+        return productService.getProductsByRandomCategoryAndRating();
     }
 
     @GetMapping("/by")
@@ -56,7 +56,7 @@ public class ProductController {
         try {
             return productService.getProductByProductManufacturerAndQuantityStockAndRating(country, name, quantity, rating);
         } catch (ResponseException e) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
         }
     }
 }
