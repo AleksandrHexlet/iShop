@@ -11,6 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.edu.ishop.entity.Category;
 
@@ -104,21 +105,30 @@ public class ProductService {
     }
 
     public List<Product> getProductsByRandomCategoryAndRating() {
-        List<Product> productList = new ArrayList<>();
+        List<Product> productList;
         List<Category> categoriesAll = categoryRepository.findAll();
-        int randomIndexCategories = (int) (Math.random() * categoriesAll.size());
-        Category randomCategory = categoriesAll.get(randomIndexCategories);
+
         Pageable limit = PageRequest.of(0, 6);
-        while (productList.size() == 0) {
+        do {
+            int randomIndexCategories = (int) (Math.random() * categoriesAll.size());
+            Category randomCategory = categoriesAll.get(randomIndexCategories);
             productList = productRepository.findAll(findProductbyCategoryAndRatingAndDate(
                     randomCategory.getId(), 4.0, LocalDate.now().minusDays(30)
-            ), limit).getContent();
-            if (productList.size() > 0) break;
-        }
-
+            ).and(findProductActiveManufactureAndCountUpZero()), limit).getContent();
+        } while (productList.size() == 0);
 
         return productList;
     }
+
+    public Product getProductById(int id) {
+        Product product = productRepository.findById(id).orElse(null);
+//       List<FeedBack> feedBacks = product.getFeedBack();
+
+        return product;
+    }
+
+    ;
+
 
     public List<Product> getProductListByName(String[] nameArr) {
         return productRepository.getProductsByName(nameArr);
@@ -144,7 +154,7 @@ public class ProductService {
 //        return productRepository.findProductByProductManufacturerAndQuantityStockAndRating(productManufactureIdOUT, quantity,rating);
         return productRepository.findAll
                 (findProductByProductManufacturerAndQuantityStockAndRating(productManufactureIdOUT,
-                        quantity, rating));
+                        quantity, rating).and(findProductActiveManufactureAndCountUpZero()));
     }
 
     @Bean
@@ -154,4 +164,40 @@ public class ProductService {
 
         };
     }
+
+    public List<Product> getProductByName(String name) {
+        return productRepository.findAll(findProductByName(name));
+    }
+
+    ;
+
+    public List<Product>getProductByCategoryAndQuantityAndRatingAndManufacturerName(
+            String categoryURL, int quantity, double rating,List<String> namesManufacturer,int page, int size,
+            String orderSort
+    ){
+        Sort sort = Sort.by("price");
+        if(orderSort == null || orderSort.equals("asc")){
+             sort = Sort.by("price");
+        }
+        if(orderSort != null && orderSort.equals("desc")){
+             sort = Sort.by("price");
+        }
+
+        Pageable pageable = PageRequest.of(page,size,sort);
+
+
+        return  productRepository.findAll(findByCategoryAndQuantityAndRatingAndManufacturerName
+                ( categoryURL,quantity,rating, namesManufacturer),pageable).getContent();
+
+    };
 }
+
+//import org.springframework.data.domain.PageRequest;
+//        import org.springframework.data.domain.Pageable;
+//1. GET:: /product/category/{categoryUrl} - постраничное получение всех товаров определенной категории
+// с возможностью сортировки по возрастанию / убыванию цены или новизне (отзывы не нужны).
+//        Номер страницы, количество записей и порядок сортировки передаются параметрами и
+//        являются обязательными.Добавить фильтрацию по доступному количеству (больше или равно
+//        указанному), по рейтингу (больше или равно указанному),
+//        по производителю (один или несколько). Количество, рейтинг, производитель передаются
+//        параметрами и не являются обязательными.

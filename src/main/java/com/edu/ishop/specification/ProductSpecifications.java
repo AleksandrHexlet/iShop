@@ -7,10 +7,12 @@ import com.edu.ishop.entity.ProductManufacturer;
 import jakarta.persistence.Column;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 //private String nameProduct;
@@ -92,8 +94,57 @@ public class ProductSpecifications {
     }
 
 
-}
+    public static Specification<Product> findProductActiveManufactureAndCountUpZero() {
+        return (root, query, criteriaBuilder) -> {
+            Join<ProductManufacturer, Product> ProductProductManufacturerJoin =
+                    root.join("productManufacturer", JoinType.LEFT);
+            return criteriaBuilder.and(
+                    criteriaBuilder.greaterThan(root.get("quantityStock"), 0),
+                    criteriaBuilder.isTrue(ProductProductManufacturerJoin.get("isActive"))
+            );
+        };
+    }
 
+    public static Specification<Product>findProductByName(String name){
+        return (root, query, criteriaBuilder) -> {
+            return criteriaBuilder.like(
+                    criteriaBuilder.lower(root.get("nameProduct")),"%"+name.toLowerCase()+"%");
+        };
+    }
+     public static  Specification<Product>findByCategoryAndQuantityAndRatingAndManufacturerName(
+             String categoryURL, Integer quantity, double rating,List<String> namesManufacturer
+     ){
+       return (root, query, criteriaBuilder) -> {
+           List<Predicate> predicates = new ArrayList<>();
+        Join<Category,Product> productCategoryJoin = root.join("categoryProduct",JoinType.LEFT);
+        if(namesManufacturer != null && namesManufacturer.size()>0){
+            Join<ProductManufacturer,Product>productProductManufacturerJoin = root.join("productManufacturer",JoinType.LEFT);
+            predicates.add(criteriaBuilder.lower(productProductManufacturerJoin.get("name"))
+                            .in(namesManufacturer));
+//                            .in(namesManufacturer.stream().map((item)-> item.toLowerCase())));
+//
+//                            .in(namesManufacturer.forEach((item)-> item.toLowerCase())));
+        }
+
+        predicates.add(criteriaBuilder.equal(criteriaBuilder.lower(productCategoryJoin.get("url")),categoryURL.toLowerCase()));
+        if(quantity != null && quantity > 0){
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("quantityStock"),quantity));
+        }
+
+        if(rating >= 0){
+            predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("rating"),rating));
+        }
+
+
+           return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+       };
+     }
+}
+//    private Category categoryProduct;
+//    productManufacturer
+
+
+//
 
 //    @Query(nativeQuery = true, value = "SELECT * FROM product WHERE name_product = :name and (url_image = :image or " +
 //            "url_image = null)")

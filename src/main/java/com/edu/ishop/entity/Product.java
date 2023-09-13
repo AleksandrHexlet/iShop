@@ -33,7 +33,7 @@ public class Product {
     @ManyToOne
     private ProductManufacturer productManufacturer;
     @OneToMany(mappedBy = "product")
-    private List<FeedBack> feedBack;
+    private List<FeedBack> feedBack = new ArrayList<>();
     @ManyToOne
     private Category categoryProduct;
 
@@ -94,6 +94,10 @@ public class Product {
 
     public ProductManufacturer getProductManufacturer() {
         return productManufacturer;
+    }
+
+    public List<FeedBack> getFeedBack() {
+        return feedBack;
     }
 
     public Category getCategoryProduct() {

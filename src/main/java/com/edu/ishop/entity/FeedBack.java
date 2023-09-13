@@ -1,5 +1,6 @@
 package com.edu.ishop.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,7 @@ public class FeedBack {
 
     @ManyToOne
     @JoinColumn(nullable = false)
+    @JsonIgnore
     private Product product;
 
     public FeedBack() {
