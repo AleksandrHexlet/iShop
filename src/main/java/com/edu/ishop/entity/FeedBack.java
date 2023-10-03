@@ -13,6 +13,8 @@ public class FeedBack {
     @Id
     @GeneratedValue
     private int id;
+    @ManyToOne
+    private Customer customer;
     private ZonedDateTime timeAdded;
     @Column(nullable = false)
     private String text;
@@ -25,11 +27,13 @@ public class FeedBack {
     public FeedBack() {
     }
 
-    public FeedBack(String text, Product product) {
+    public FeedBack(String text, Product product,Customer customerOUT) {
 
         this.timeAdded = ZonedDateTime.now();
         this.text = text;
         this.product = product;
+        this.customer = customerOUT;
+
     }
 
     public int getId() {
@@ -46,5 +50,8 @@ public class FeedBack {
 
     public Product getProduct() {
         return product;
+    }
+    public Customer getCustomer() {
+        return customer;
     }
 }

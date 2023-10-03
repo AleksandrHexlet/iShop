@@ -70,7 +70,8 @@ public class ProductService {
 
         ProductManufacturer productManufacturer1 = new ProductManufacturer("MilkCorp", "Russia", true);
         productManufactureRepository.save(productManufacturer1);
-        FeedBack feedBack1 = new FeedBack("Отличный, вкусный продукт", null);
+        Customer customer= new Customer();
+        FeedBack feedBack1 = new FeedBack("Отличный, вкусный продукт", null,customer);
 
         Product milk = new Product("milk", "http://milk.com", new BigDecimal("234.56"), 4.5, 99_999, date2010, productManufacturer1, categoryService.dairyProducts);
 
@@ -135,9 +136,10 @@ public class ProductService {
     }
 
     public FeedBack addFeedBackToProduct(int id, String textFeedBack) {
+        Customer customer = new Customer();
         Product product = productRepository.findById(id).orElse(null);
         if (product == null) return null;
-        FeedBack feedBack = new FeedBack(textFeedBack, product);
+        FeedBack feedBack = new FeedBack(textFeedBack, product,customer);
         product.setFeedbackToList(feedBack);
         feedBackRepository.save(feedBack);
         return feedBack;
