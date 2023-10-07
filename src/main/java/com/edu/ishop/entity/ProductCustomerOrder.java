@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 public class ProductCustomerOrder {
     @Id
+    @GeneratedValue
     int id;
     @MapsId("id")
     @ManyToOne
@@ -14,8 +15,6 @@ public class ProductCustomerOrder {
     @MapsId("id")
     private CustomerOrder customerOrder;
     private int count;
-
-
 
 
     public ProductCustomerOrder() {
@@ -46,5 +45,13 @@ public class ProductCustomerOrder {
 
     public void setCustomerOrder(CustomerOrder customerOrder) {
         this.customerOrder = customerOrder;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

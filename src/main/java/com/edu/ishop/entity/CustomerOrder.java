@@ -1,5 +1,7 @@
 package com.edu.ishop.entity;
 
+import com.edu.ishop.services.CustomerOrderDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -9,18 +11,23 @@ import java.util.List;
 import java.util.Map;
 
 @Entity
+@JsonDeserialize(using = CustomerOrderDeserializer.class)
 public class CustomerOrder {
     @Id
+    @GeneratedValue
     private int id;
     @ManyToOne
     private Customer customer;
-
+    @OneToMany(mappedBy = "customerOrder")
+    private List<ProductCustomerOrder> productCustomerOrderList = new ArrayList<>();
+    //    select FROM customerOrder LEFT JOIN ProductCustomerOrder
+//    on ProductCustomerOrder.customerOrder = customerOrder(this)
     private LocalDate date;
     private LocalDate dateUpdateStatus;
     private OrderStatus status;
     private String deliveryAddress;
 
-    public enum OrderStatus{
+    public enum OrderStatus {
         ORDER_ACCEPTED,
         ORDER_FORMED,
         ORDER_PAID,
@@ -42,12 +49,21 @@ public class CustomerOrder {
         this.deliveryAddress = deliveryAddress;
     }
 
+    public void addListProductCustomerOrder(ProductCustomerOrder productCustomerOrder) {
+        productCustomerOrder.setCustomerOrder(this);
+        productCustomerOrderList.add(productCustomerOrder);
+    }
+
     public int getId() {
         return id;
     }
 
     public Customer getCustomer() {
         return customer;
+    }
+
+    public List<ProductCustomerOrder> getProductCustomerOrderList() {
+        return productCustomerOrderList;
     }
 
     public LocalDate getDate() {
@@ -64,5 +80,33 @@ public class CustomerOrder {
 
     public String getDeliveryAddress() {
         return deliveryAddress;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public void setProductCustomerOrder(List<ProductCustomerOrder> productCustomerOrder) {
+        this.productCustomerOrderList = productCustomerOrder;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public void setDateUpdateStatus(LocalDate dateUpdateStatus) {
+        this.dateUpdateStatus = dateUpdateStatus;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
     }
 }

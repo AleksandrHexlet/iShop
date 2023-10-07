@@ -57,4 +57,32 @@ public class Customer {
     public String getCity() {
         return city;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setFeedBack(List<FeedBack> feedBack) {
+        this.feedBack = feedBack;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setOrder(List<CustomerOrder> order) {
+        this.order = order;
+    }
 }
