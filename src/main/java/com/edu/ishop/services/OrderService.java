@@ -34,11 +34,10 @@ public class OrderService {
 
         if (isExistCustomer == false) throw new ResponseException
                 ("Такого клиента не существует. Пройдите авторизацию");
-        int[] idProductArray = customerOrder.getProductCustomerOrderList().stream()
-                .map((productCustomerOrder)-> productCustomerOrder.getProduct().getId()).toArray(new int[0]);
+        Integer[] idProductArray = customerOrder.getProductCustomerOrderList().stream()
+                .map((productCustomerOrder)-> productCustomerOrder.getProduct().getId()).toArray(Integer[]::new);
+//          . toArray(Person[]::new) синтаксис посмотрел в JAVADOC .toArray в описании над методом   <A> A[] toArray(IntFunction<A[]> generator);
 
-//                    .map((productCustomerOrder)-> productCustomerOrder.getProduct().getId())
-//                .toArray(int[]::new);
 
 //        orderRepository.getProductsCountById();
         int idCustomerOrder = orderRepository.save(customerOrder).getId();
