@@ -1,0 +1,28 @@
+//const customerOrderJSON =
+   {
+         "customerId": "567",
+         "deliveryAddress": "MSK",
+
+        "product":
+        [
+        {
+             "productId":"789",
+             "count": "1234"
+        },
+        {
+             "productId":"567",
+             "count": "4567"
+        }
+        ]
+    };
+
+// createProductJSON
+{
+  "nameProduct": "cheese",
+  "urlImage": "http://MSK.com",
+  "price": 5678,
+  "quantityStock": 99999,
+  "productManufacturer": "Красный Октябрь",
+  "categoryProduct": 56789,
+}
+

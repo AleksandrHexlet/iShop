@@ -34,12 +34,13 @@ public class OrderService {
 
         if (isExistCustomer == false) throw new ResponseException
                 ("Такого клиента не существует. Пройдите авторизацию");
-        Integer[] idProductArray = customerOrder.getProductCustomerOrderList().stream()
-                .map((productCustomerOrder)-> productCustomerOrder.getProduct().getId()).toArray(Integer[]::new);
-//          . toArray(Person[]::new) синтаксис посмотрел в JAVADOC .toArray в описании над методом   <A> A[] toArray(IntFunction<A[]> generator);
+        int[] idProductArray = customerOrder.getProductCustomerOrderList().stream()
+                .mapToInt((productCustomerOrder)-> productCustomerOrder.getProduct()
+                        .getId()).toArray();
+        int countProductInBD = orderRepository.getProductsCountById(idProductArray);
+        if(countProductInBD != idProductArray.length) throw new
+                ResponseException("Одного из товар нет в базе данных");
 
-
-//        orderRepository.getProductsCountById();
         int idCustomerOrder = orderRepository.save(customerOrder).getId();
         System.out.println("idCustomerOrder == " + idCustomerOrder);
         if (idCustomerOrder != customerOrder.getId()) {
@@ -48,6 +49,9 @@ public class OrderService {
             throw new ResponseException("Сохранение не удалось");
         }
     }
+
+
+
 }
 
 //   {

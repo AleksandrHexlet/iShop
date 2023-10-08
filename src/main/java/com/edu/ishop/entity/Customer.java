@@ -9,6 +9,7 @@ import java.util.List;
 //@Table(name = "Customer")
 public class Customer {
     @Id
+    @GeneratedValue
     private int id;
     @OneToMany(mappedBy="customer")
     private List<FeedBack> feedBack = new ArrayList<>();

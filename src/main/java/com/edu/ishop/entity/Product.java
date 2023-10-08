@@ -1,5 +1,7 @@
 package com.edu.ishop.entity;
 
+import com.edu.ishop.admin.services.ProductDeserialized;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -10,6 +12,7 @@ import java.util.List;
 
 
 @Entity
+@JsonDeserialize(using = ProductDeserialized.class)
 public class Product {
     @Id
     @GeneratedValue
@@ -106,6 +109,42 @@ public class Product {
 
     public Category getCategoryProduct() {
         return categoryProduct;
+    }
+
+    public void setNameProduct(String nameProduct) {
+        this.nameProduct = nameProduct;
+    }
+
+    public void setUrlImage(String urlImage) {
+        this.urlImage = urlImage;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public void setQuantityStock(int quantityStock) {
+        this.quantityStock = quantityStock;
+    }
+
+    public void setDateAdded(LocalDate dateAdded) {
+        this.dateAdded = dateAdded;
+    }
+
+    public void setProductManufacturer(ProductManufacturer productManufacturer) {
+        this.productManufacturer = productManufacturer;
+    }
+
+    public void setFeedBack(List<FeedBack> feedBack) {
+        this.feedBack = feedBack;
+    }
+
+    public void setCategoryProduct(Category categoryProduct) {
+        this.categoryProduct = categoryProduct;
     }
 
     @Override

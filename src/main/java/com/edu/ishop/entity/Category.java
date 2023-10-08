@@ -26,7 +26,7 @@ public class Category {
         this.parent = parentOUT;
     }
 
-    protected Category() {
+    public Category() {
     }
 
     //Геттеры необходимы, чтобы приватные поля попали в JSON и в последствии в Базу данных.
@@ -45,6 +45,10 @@ public class Category {
 
     public Category getParent() {
         return parent;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
