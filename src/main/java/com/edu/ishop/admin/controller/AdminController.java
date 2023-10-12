@@ -4,11 +4,14 @@ import com.edu.ishop.admin.services.AdminService;
 import com.edu.ishop.helpers.entity.Category;
 import com.edu.ishop.helpers.entity.Customer;
 import com.edu.ishop.helpers.entity.Product;
+import com.edu.ishop.helpers.entity.ProductManufacturer;
 import com.edu.ishop.helpers.exceptions.ResponseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController("/admin")
 public class AdminController {
@@ -49,6 +52,26 @@ public class AdminController {
             return adminService.createNewCategory(category);
         } catch (ResponseException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @PostMapping("/trader")
+    public ProductManufacturer createNewTrader(@RequestBody ProductManufacturer productManufacturer){
+            return adminService.createNewTrader(productManufacturer);
+
+    }
+
+    @PutMapping("/trader")
+    public ResponseEntity<String> updateTrader(@RequestParam String userName,
+                                       @RequestParam(required = false, defaultValue = "-1") int rate,
+                                       @RequestParam(required = false) String cityStorage ){
+        System.out.println("rate = " + rate);
+
+        try {
+            adminService.updateTrader(userName, rate, cityStorage);
+            return new ResponseEntity<String> ("update success", HttpStatusCode.valueOf(204));
+        } catch (ResponseException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_MODIFIED, e.getMessage());
         }
     }
 

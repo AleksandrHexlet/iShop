@@ -10,11 +10,11 @@ public class ProductManufactureId implements Serializable {
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
-    private String city;
+    private String cityStorage;
 
-    public ProductManufactureId(String name, String city) {
+    public ProductManufactureId(String name, String cityStorage) {
         this.name = name;
-        this.city = city;
+        this.cityStorage = cityStorage;
     }
 
     public ProductManufactureId() {
@@ -24,8 +24,16 @@ public class ProductManufactureId implements Serializable {
         return name;
     }
 
-    public String getCity() {
-        return city;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCityStorage() {
+        return cityStorage;
+    }
+
+    public void setCityStorage(String cityStorage) {
+        this.cityStorage = cityStorage;
     }
 
     @Override
@@ -33,12 +41,12 @@ public class ProductManufactureId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductManufactureId that = (ProductManufactureId) o;
-        return Objects.equals(name, that.name) && Objects.equals(city, that.city);
+        return Objects.equals(name, that.name) && Objects.equals(cityStorage, that.cityStorage);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, city);
+        return Objects.hash(name, cityStorage);
     }
 }
 

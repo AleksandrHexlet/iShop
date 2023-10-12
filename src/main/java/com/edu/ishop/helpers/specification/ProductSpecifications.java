@@ -48,7 +48,7 @@ public class ProductSpecifications {
 
             return criteriaBuilder.and(
                     criteriaBuilder.equal(productManufacturerProductJoin.get("name"), id.getName()),
-                    criteriaBuilder.equal(productManufacturerProductJoin.get("country"), id.getCity()),
+                    criteriaBuilder.equal(productManufacturerProductJoin.get("country"), id.getCityStorage()),
                     criteriaBuilder.greaterThanOrEqualTo(root.get("quantityStock"), quantity),
                     criteriaBuilder.greaterThanOrEqualTo(root.get("rating"), rating)
 

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -102,6 +103,16 @@ public class ProductController {
     }
 
     ;
+
+    @PostMapping("/uploadExcel")
+    public List<String> uploadProducts(@RequestParam MultipartFile file, @RequestParam String userNameTrader){
+        try {
+            return  productService.uploadProducts(file, userNameTrader);
+        } catch (ResponseException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
+        }
+
+    }
 
 
 

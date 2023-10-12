@@ -7,6 +7,7 @@ import com.edu.ishop.helpers.repository.FeedBackRepository;
 import com.edu.ishop.helpers.repository.ProductManufactureRepository;
 import com.edu.ishop.helpers.repository.ProductRepository;
 import com.edu.ishop.helpers.entity.*;
+import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +15,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
@@ -67,7 +70,8 @@ public class ProductService {
         ZonedDateTime zonedDT11 = ZonedDateTime.parse("2010-10-10T18:30:45+01:00[Europe/London]");
         ZonedDateTime zonedDT12 = ZonedDateTime.parse("2011-04-22T08:40:15+10:00[Australia/Sydney]", DateTimeFormatter.ISO_DATE_TIME);
 
-        ProductManufacturer productManufacturer1 = new ProductManufacturer("MilkCorp", "Russia", true);
+        ProductManufacturer productManufacturer1 = new ProductManufacturer("MilkCorp", "Russia",
+                date2015, 4.9, new BigDecimal("4.789"), 7, "MSK", true);
         productManufactureRepository.save(productManufacturer1);
         Customer customer = new Customer();
         FeedBack feedBack1 = new FeedBack("Отличный, вкусный продукт", null, customer);
@@ -192,7 +196,95 @@ public class ProductService {
 
     }
 
-    ;
+
+    public boolean uploadFile(MultipartFile file, String userNameTrader) {
+        InputStream in = null;
+        try {
+            in = file.getInputStream();
+        } catch (IOException e) {
+            return false;
+        }
+
+        File currDir = new File("files/" + userNameTrader);
+        if (!currDir.exists()) currDir.mkdirs();
+        System.out.println("PATH DIR = " + currDir.getAbsolutePath());
+
+        String path = currDir.getAbsolutePath();
+        String fileLocation = path + "/" + file.getOriginalFilename();
+//        "/files/userNameTrader/products.excel"
+
+        try (FileOutputStream fileOutputStream = new FileOutputStream(fileLocation)) {
+            int readCount = 0;
+            while ((readCount = in.read()) != -1) {
+                fileOutputStream.write(readCount);
+            }
+            fileOutputStream.flush();
+        } catch (IOException exception) {
+            return false;
+        }
+
+
+        return true;
+    }
+
+
+    public List<Product> readExcelToList(MultipartFile file, ProductManufacturer trader) {
+ List<Product> productList = new ArrayList<>();
+        try {
+            Workbook workbook = WorkbookFactory
+                    .create(new File("files/" + trader.getUserName() + "/" + file.getOriginalFilename()));
+
+            Sheet sheet = workbook.getSheetAt(0);
+            int rowNumber = 0;
+            for (Row row : sheet) {
+
+                if (rowNumber == 0) {
+                    rowNumber++;
+                    continue;
+                }
+                Product product = new Product();
+                product.setDateAdded(LocalDate.now());
+                product.setProductManufacturer(trader);
+//                product.setProductManufacturer();
+                for (Cell cell : row) {
+//                    cell.getStringCellValue()
+//                    cell.getNumericCellValue()
+                    int cellIndex = cell.getColumnIndex();
+                    switch (cellIndex) {
+                        case 0 -> product.setNameProduct(cell.getStringCellValue());
+                        case 1 -> product.setQuantityStock((int) cell.getNumericCellValue());
+                        case 2 -> product.setPrice(BigDecimal.valueOf(cell.getNumericCellValue()));
+                        case 3 -> product.setUrlImage(cell.getStringCellValue());
+                        case 4 -> {
+                            Category category = categoryRepository.findByUrl(cell.getStringCellValue());
+                            if (category == null) break;
+                            product.setCategoryProduct(category);
+                        }
+
+                    }
+
+                }
+                productList.add(product);
+            }
+        } catch (IOException e) {
+           return  null;
+        }
+        return productList;
+    }
+
+
+    public List<String> uploadProducts(MultipartFile file, String userNameTrader) throws ResponseException {
+       ProductManufacturer trader =  productManufactureRepository.findById(userNameTrader).orElse(null);
+      if(trader == null) throw new ResponseException("Продавец не зарегистрирован");
+
+        boolean isUpload = uploadFile(file, userNameTrader);
+        if (!isUpload) return null;
+        List<Product> productList = readExcelToList(file,trader);
+        if(productList == null) return null;
+        productRepository.saveAll(productList);
+        List<String> nameProductList = productList.stream().map((product)-> product.getNameProduct()).toList();
+        return nameProductList;
+    }
 }
 
 //import org.springframework.data.domain.PageRequest;

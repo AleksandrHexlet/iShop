@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name="tb_categories")
-@JsonDeserialize(using = CategoryDeserialized.class)
+//@JsonDeserialize(using = CategoryDeserialized.class)
 public class Category {
     @Id
     @GeneratedValue
@@ -14,7 +14,7 @@ public class Category {
     @Column(nullable = false,length = 3456)
     private String name;
     @Column(unique = true,nullable = false,columnDefinition = "TEXT NOT NULL")
-    private String url;
+    private String url; // food sport  и т.д. это то, что отображается в строке браузера Например category/food
     @ManyToOne
     private Category parent;
 

@@ -28,7 +28,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> , Jpa
     List<Product> getProductsByPriceAndQuantity(int quantity, BigDecimal price);
 
     @Query("SELECT product FROM Product product LEFT JOIN product.productManufacturer manufacture  WHERE " +
-            "product.rating > :rating AND manufacture.city = :country")
+            "product.rating > :rating AND manufacture.cityStorage = :country")
     List<Product> getProductsByRatingAndManufactureCountry(short rating, String country);
 
  @Query("SELECT prod FROM Product prod WHERE prod.nameProduct in (:namesOfProduct)")
@@ -48,7 +48,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> , Jpa
 // по доступному количеству (больше или равно указанному), по рейтингу (больше или равно указанному)
 
     @Query("SELECT prod FROM Product prod LEFT JOIN prod.productManufacturer manufactory " +
-            "WHERE manufactory.name =:#{#id.name} AND manufactory.city =:#{#id.country} " +
+            "WHERE manufactory.name =:#{#id.name} AND manufactory.cityStorage =:#{#id.cityStorage} " +
             "AND prod.quantityStock >= :quantity AND prod.rating >=:rating")
     List<Product>findProductByProductManufacturerAndQuantityStockAndRating(ProductManufactureId id,int quantity,double rating);
 

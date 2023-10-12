@@ -28,18 +28,10 @@ public class AdminService {
     }
 
 
-
-
-
-
-
-
-
     public Product createNewProduct(Product product) throws ResponseException {
         product.setDateAdded(LocalDate.now());
         ProductManufacturer productManufacturer = productManufactureRepository
-                .findById(new ProductManufactureId(product.getProductManufacturer()
-                .getName(), product.getProductManufacturer().getCity())).orElse(null);
+                .findById(product.getProductManufacturer().getUserName()).orElse(null);
         if (productManufacturer == null || !productManufacturer.isActive()) {
             throw new ResponseException("Товар не может быть добавлен. Производитель " +
                     "не существует ил не активен");
@@ -50,26 +42,44 @@ public class AdminService {
     }
 
     public Customer createNewCustomer(Customer customer) throws ResponseException {
-    Customer customerIsExist = customerRepositoryAdmin
-            .getCustomersByUserName(customer.getUserName()).get();
-    if(customerIsExist != null) {
-        throw new ResponseException("Клиент с таким userName уже существует ");
-    }
+        Customer customerIsExist = customerRepositoryAdmin
+                .getCustomersByUserName(customer.getUserName()).get();
+        if (customerIsExist != null) {
+            throw new ResponseException("Клиент с таким userName уже существует ");
+        }
         return customerRepositoryAdmin.save(customer);
 
 
     }
 
-    public Category createNewCategory (Category category)throws ResponseException {
-     Category сategoryIsExist = categoryRepository.findByName(category.getName());
-     if (сategoryIsExist != null)   {
-         throw new ResponseException("Категория с таким именем уже существует ");
-     }
+    public Category createNewCategory(Category category) throws ResponseException {
+        Category сategoryIsExist = categoryRepository.findByName(category.getName());
+        if (сategoryIsExist != null) {
+            throw new ResponseException("Категория с таким именем уже существует ");
+        }
         return categoryRepository.save(category);
     }
 
 
+    public ProductManufacturer createNewTrader(ProductManufacturer productManufacturer) {
+        productManufacturer.setDateRegistration(LocalDate.now());
+        productManufactureRepository.save(productManufacturer);
+        return productManufacturer;
+    }
 
+    public void updateTrader(String userName, int rate, String cityStorage) throws ResponseException {
+        if (userName == null)
+            throw new ResponseException("userName должен быть заполнен");
+        if ((cityStorage != null && cityStorage.isEmpty() && rate == -1) || (cityStorage == null && rate == -1))
+            throw new ResponseException("Нужна информация для обновления. Сейчас данные не переданы");
+       ProductManufacturer productManufacturer =  productManufactureRepository.findById(userName).orElse(null);
+       if(productManufacturer == null) throw new ResponseException("Продавец не зарегистрирован");
+        if(productManufacturer.getCityStorage().equals(cityStorage) && productManufacturer.getRate() == rate)
+            throw new ResponseException("Данные не требуют обновления.Они идентичны сохранённым в БД");
+        if(rate != -1)productManufacturer.setRate(rate);
+        if(cityStorage != null)productManufacturer.setCityStorage(cityStorage);
+       productManufactureRepository.save(productManufacturer);
+    }
 }
 
 

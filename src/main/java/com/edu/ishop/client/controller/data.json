@@ -23,8 +23,6 @@
     "productManufacturer": "Красный Октябрь",
     "categoryProductId": 56789
   },
-
-
   //createNewCustomer
   {
     "userName": "cheeseCakeFactory",
@@ -33,14 +31,25 @@
     "name": "Ivanov",
     "city": "Moscow"
   },
-
-// createNewCategory
+  // createNewCategory
   {
     "name": "cheeseCakeFactory",
     "url": "http://MSK.food.com",
     "parent": {
+      "id": 3,
       "name": "parentCategoryCheeseCakeFactory",
       "url": "http://MSK.parent.food.com"
     }
+  },
+  // createNewTrader
+  {
+    "name": "cheeseCakeFactory",
+    "userName": "food.com",
+    "rate": 123,
+    "cityStorage": "SPB",
+    "url": "http://MSK.parent.food.com"
   }
+
+
+
 ]

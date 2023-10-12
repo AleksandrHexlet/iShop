@@ -17,5 +17,5 @@ public interface CustomerRepositoryAdmin extends CrudRepository<Customer, Intege
 
 
     @Query(nativeQuery = true, value = "SELECT * FROM customer WHERE userName = :usernameOUT")
-    public Optional<Customer> getCustomersByUserName(String usernameOut);
+    public Optional<Customer> getCustomersByUserName(String usernameOUT);
 }
