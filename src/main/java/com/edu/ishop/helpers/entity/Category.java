@@ -3,6 +3,7 @@ package com.edu.ishop.helpers.entity;
 import com.edu.ishop.helpers.deserializer.CategoryDeserialized;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name="tb_categories")
@@ -12,8 +13,10 @@ public class Category {
     @GeneratedValue
     private int id;
     @Column(nullable = false,length = 3456)
+    @Size(min=2,max= 199, message = "Длина имени категории должна быть равен или более 2 символам и менее 199 символов")
     private String name;
     @Column(unique = true,nullable = false,columnDefinition = "TEXT NOT NULL")
+
     private String url; // food sport  и т.д. это то, что отображается в строке браузера Например category/food
     @ManyToOne
     private Category parent;

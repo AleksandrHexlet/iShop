@@ -1,35 +1,40 @@
 package com.edu.ishop.helpers.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 
 @Entity
 //@IdClass(ProductManufactureId.class)
-public class ProductManufacturer {
+public class ProductTrader {
 
-//    @Id
+    //    @Id
+    @Size(min = 2, max = 199, message = "Длина имени категории должна быть равен или более 2 символам и менее 199 символов")
     private String name;
     @Id
     private String userName;
     private LocalDate dateRegistration;
     private double rating;
+    @Positive()
+    @DecimalMin(value = "1")
     private BigDecimal traderBill;
     private int rate;
 
 
-//    @Id
+    //    @Id
     private String cityStorage;
     private boolean isActive = true;
 
-    public ProductManufacturer() {
+    public ProductTrader() {
     }
 
-    public ProductManufacturer(String name, String userName, LocalDate dateRegistration,
-                               double rating, BigDecimal traderBill, int rate, String cityStorage,
-                               boolean isActive) {
+    public ProductTrader(String name, String userName, LocalDate dateRegistration,
+                         double rating, BigDecimal traderBill, int rate, String cityStorage,
+                         boolean isActive) {
         this.name = name;
         this.userName = userName;
         this.dateRegistration = dateRegistration;

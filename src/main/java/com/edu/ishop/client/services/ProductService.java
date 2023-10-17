@@ -34,7 +34,7 @@ public class ProductService {
     CategoryService categoryService;
     CategoryRepository categoryRepository;
 
-    ProductManufacturer productManufacturer;
+    ProductTrader productTrader;
     FeedBackRepository feedBackRepository;
     FeedBack feedBack;
 
@@ -45,7 +45,7 @@ public class ProductService {
         this.feedBackRepository = feedBackRepository;
         this.categoryService = categoryService;
         this.categoryRepository = categoryRepository;
-        this.productManufacturer = productManufacturer;
+        this.productTrader = productTrader;
         this.feedBack = feedBack;
     }
 
@@ -56,7 +56,7 @@ public class ProductService {
 //        this.rating = rating;
 //        this.quantityStock = quantityStock;
 //        this.dateAdded = dateAdded;
-//        this.productManufacturer = productManufacturer;
+//        this.productTrader = productTrader;
 //        this.feedBack = feedBack;
 //        this.categoryProduct = categoryProduct;
     public List<Product> getProduct() {
@@ -70,25 +70,25 @@ public class ProductService {
         ZonedDateTime zonedDT11 = ZonedDateTime.parse("2010-10-10T18:30:45+01:00[Europe/London]");
         ZonedDateTime zonedDT12 = ZonedDateTime.parse("2011-04-22T08:40:15+10:00[Australia/Sydney]", DateTimeFormatter.ISO_DATE_TIME);
 
-        ProductManufacturer productManufacturer1 = new ProductManufacturer("MilkCorp", "Russia",
+        ProductTrader productTrader1 = new ProductTrader("MilkCorp", "Russia",
                 date2015, 4.9, new BigDecimal("4.789"), 7, "MSK", true);
-        productManufactureRepository.save(productManufacturer1);
+        productManufactureRepository.save(productTrader1);
         Customer customer = new Customer();
         FeedBack feedBack1 = new FeedBack("Отличный, вкусный продукт", null, customer);
 
-        Product milk = new Product("milk", "http://milk.com", new BigDecimal("234.56"), 4.5, 99_999, date2010, productManufacturer1, categoryService.dairyProducts);
+        Product milk = new Product("milk", "http://milk.com", new BigDecimal("234.56"), 4.5, 99_999, date2010, productTrader1, categoryService.dairyProducts);
 
-        Product hamburger = new Product("hamburger", "http://hamburger.com", new BigDecimal("345.56"), 4.0, 95, date2011, productManufacturer1, categoryService.readyMadeFood);
-
-
-        Product washingMachine = new Product("washingMachine", "http://washingMachine.com", new BigDecimal("11234.56"), 4.2, 99_999, date2012, productManufacturer1, categoryService.homeAppliances);
-        Product Iphone19 = new Product("Iphone19", "http://Iphone19.com", new BigDecimal("5561.56"), 3.5, 12399_999, date2013, productManufacturer1, categoryService.electronic);
-        Product orange = new Product("orange", "http://orange.com", new BigDecimal("34.60"), 4.1, 2_999, date2014, productManufacturer1, categoryService.healthyFood);
+        Product hamburger = new Product("hamburger", "http://hamburger.com", new BigDecimal("345.56"), 4.0, 95, date2011, productTrader1, categoryService.readyMadeFood);
 
 
-        Product carrot = new Product("carrot", "http://carrot.com", new BigDecimal("24.57"), 4.9, 67_999, date2015, productManufacturer1, categoryService.healthyFood);
-        Product sportsShoes = new Product("sportsShoes", "http://sportsShoes.com", new BigDecimal("4234.56"), 4.2, 78_999, date2010, productManufacturer1, categoryService.sport);
-        Product sportsTrousers = new Product("sportsTrousers", "http://sportsTrousers.com", new BigDecimal("7345.77"), 4.3, 89_999, date2010, productManufacturer1, categoryService.sport);
+        Product washingMachine = new Product("washingMachine", "http://washingMachine.com", new BigDecimal("11234.56"), 4.2, 99_999, date2012, productTrader1, categoryService.homeAppliances);
+        Product Iphone19 = new Product("Iphone19", "http://Iphone19.com", new BigDecimal("5561.56"), 3.5, 12399_999, date2013, productTrader1, categoryService.electronic);
+        Product orange = new Product("orange", "http://orange.com", new BigDecimal("34.60"), 4.1, 2_999, date2014, productTrader1, categoryService.healthyFood);
+
+
+        Product carrot = new Product("carrot", "http://carrot.com", new BigDecimal("24.57"), 4.9, 67_999, date2015, productTrader1, categoryService.healthyFood);
+        Product sportsShoes = new Product("sportsShoes", "http://sportsShoes.com", new BigDecimal("4234.56"), 4.2, 78_999, date2010, productTrader1, categoryService.sport);
+        Product sportsTrousers = new Product("sportsTrousers", "http://sportsTrousers.com", new BigDecimal("7345.77"), 4.3, 89_999, date2010, productTrader1, categoryService.sport);
 
 
         List<Product> productList = new ArrayList<>();
@@ -228,7 +228,7 @@ public class ProductService {
     }
 
 
-    public List<Product> readExcelToList(MultipartFile file, ProductManufacturer trader) {
+    public List<Product> readExcelToList(MultipartFile file, ProductTrader trader) {
  List<Product> productList = new ArrayList<>();
         try {
             Workbook workbook = WorkbookFactory
@@ -237,7 +237,6 @@ public class ProductService {
             Sheet sheet = workbook.getSheetAt(0);
             int rowNumber = 0;
             for (Row row : sheet) {
-
                 if (rowNumber == 0) {
                     rowNumber++;
                     continue;
@@ -245,18 +244,21 @@ public class ProductService {
                 Product product = new Product();
                 product.setDateAdded(LocalDate.now());
                 product.setProductManufacturer(trader);
-//                product.setProductManufacturer();
                 for (Cell cell : row) {
-//                    cell.getStringCellValue()
-//                    cell.getNumericCellValue()
+
                     int cellIndex = cell.getColumnIndex();
+
                     switch (cellIndex) {
-                        case 0 -> product.setNameProduct(cell.getStringCellValue());
+                        case 0 -> {
+                            if(cell.getStringCellValue() == null | cell.getStringCellValue().isEmpty() ) break;
+                            product.setNameProduct(cell.getStringCellValue());
+                        }
                         case 1 -> product.setQuantityStock((int) cell.getNumericCellValue());
                         case 2 -> product.setPrice(BigDecimal.valueOf(cell.getNumericCellValue()));
                         case 3 -> product.setUrlImage(cell.getStringCellValue());
                         case 4 -> {
                             Category category = categoryRepository.findByUrl(cell.getStringCellValue());
+                            System.out.println("category.getUrl() === " + category.getUrl());
                             if (category == null) break;
                             product.setCategoryProduct(category);
                         }
@@ -274,7 +276,7 @@ public class ProductService {
 
 
     public List<String> uploadProducts(MultipartFile file, String userNameTrader) throws ResponseException {
-       ProductManufacturer trader =  productManufactureRepository.findById(userNameTrader).orElse(null);
+       ProductTrader trader =  productManufactureRepository.findById(userNameTrader).orElse(null);
       if(trader == null) throw new ResponseException("Продавец не зарегистрирован");
 
         boolean isUpload = uploadFile(file, userNameTrader);

@@ -33,7 +33,7 @@ public class Product {
 
 
     @ManyToOne
-    private ProductManufacturer productManufacturer;
+    private ProductTrader productTrader;
     @OneToMany(mappedBy = "product")
     private List<FeedBack> feedBack = new ArrayList<>();
     @ManyToOne
@@ -45,7 +45,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(String nameProduct, String urlImage, BigDecimal price, double rating, int quantityStock, LocalDate dateAdded, ProductManufacturer productManufacturer, Category categoryProduct) {
+    public Product(String nameProduct, String urlImage, BigDecimal price, double rating, int quantityStock, LocalDate dateAdded, ProductTrader productTrader, Category categoryProduct) {
 
         this.nameProduct = nameProduct;
         this.urlImage = urlImage;
@@ -53,7 +53,7 @@ public class Product {
         this.rating = rating;
         this.quantityStock = quantityStock;
         this.dateAdded = dateAdded;
-        this.productManufacturer = productManufacturer;
+        this.productTrader = productTrader;
 
         this.categoryProduct = categoryProduct;
     }
@@ -98,8 +98,8 @@ public class Product {
         return dateAdded;
     }
 
-    public ProductManufacturer getProductManufacturer() {
-        return productManufacturer;
+    public ProductTrader getProductManufacturer() {
+        return productTrader;
     }
 
     public List<FeedBack> getFeedBack() {
@@ -134,8 +134,8 @@ public class Product {
         this.dateAdded = dateAdded;
     }
 
-    public void setProductManufacturer(ProductManufacturer productManufacturer) {
-        this.productManufacturer = productManufacturer;
+    public void setProductManufacturer(ProductTrader productTrader) {
+        this.productTrader = productTrader;
     }
 
     public void setFeedBack(List<FeedBack> feedBack) {

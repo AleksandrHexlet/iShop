@@ -14,6 +14,9 @@ public class ProductCustomerOrder {
     @ManyToOne
     @MapsId("id")
     private CustomerOrder customerOrder;
+
+    @ManyToOne
+    private ProductTrader productTrader;
     private int count;
 
 
@@ -25,6 +28,10 @@ public class ProductCustomerOrder {
         this.product = product;
         this.customerOrder = customerOrder;
         this.count = count;
+    }
+
+    public ProductTrader getProductTrader() {
+        return productTrader;
     }
 
     public int getId() {

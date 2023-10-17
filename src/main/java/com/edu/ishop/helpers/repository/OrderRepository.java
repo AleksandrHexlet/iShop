@@ -16,4 +16,7 @@ public interface OrderRepository extends JpaRepository<CustomerOrder, Integer> {
 //    @Query("SELECT product FROM Product product LEFT JOIN product.productManufacturer manufacture  WHERE " +
 //            "product.rating > :rating AND manufacture.country = :country")
 //    List<Product> getProductsByRatingAndManufactureCountry(short rating, String country);
+
+
+
 }

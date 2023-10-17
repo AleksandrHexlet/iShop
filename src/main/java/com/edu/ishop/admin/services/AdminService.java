@@ -1,15 +1,18 @@
 package com.edu.ishop.admin.services;
 
+import com.edu.ishop.helpers.HistoryOrder;
 import com.edu.ishop.helpers.entity.*;
-import com.edu.ishop.helpers.repository.CategoryRepository;
-import com.edu.ishop.helpers.repository.CustomerRepositoryAdmin;
-import com.edu.ishop.helpers.repository.ProductRepositoryAdmin;
+import com.edu.ishop.helpers.repository.*;
 import com.edu.ishop.helpers.exceptions.ResponseException;
-import com.edu.ishop.helpers.repository.ProductManufactureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 
@@ -18,9 +21,9 @@ public class AdminService {
     ProductManufactureRepository productManufactureRepository;
     CategoryRepository categoryRepository;
     CustomerRepositoryAdmin customerRepositoryAdmin;
-
+    ProductCustomerOrderRepository productCustomerOrderRepository;
     @Autowired
-    public AdminService(ProductRepositoryAdmin productRepositoryAdmin, ProductManufactureRepository productManufactureRepository, CategoryRepository categoryRepository, CustomerRepositoryAdmin customerRepositoryAdmin) {
+    public AdminService(ProductCustomerOrderRepository productCustomerOrderRepository,ProductRepositoryAdmin productRepositoryAdmin, ProductManufactureRepository productManufactureRepository, CategoryRepository categoryRepository, CustomerRepositoryAdmin customerRepositoryAdmin) {
         this.productRepositoryAdmin = productRepositoryAdmin;
         this.productManufactureRepository = productManufactureRepository;
         this.categoryRepository = categoryRepository;
@@ -30,9 +33,9 @@ public class AdminService {
 
     public Product createNewProduct(Product product) throws ResponseException {
         product.setDateAdded(LocalDate.now());
-        ProductManufacturer productManufacturer = productManufactureRepository
+        ProductTrader productTrader = productManufactureRepository
                 .findById(product.getProductManufacturer().getUserName()).orElse(null);
-        if (productManufacturer == null || !productManufacturer.isActive()) {
+        if (productTrader == null || !productTrader.isActive()) {
             throw new ResponseException("Товар не может быть добавлен. Производитель " +
                     "не существует ил не активен");
         }
@@ -61,10 +64,10 @@ public class AdminService {
     }
 
 
-    public ProductManufacturer createNewTrader(ProductManufacturer productManufacturer) {
-        productManufacturer.setDateRegistration(LocalDate.now());
-        productManufactureRepository.save(productManufacturer);
-        return productManufacturer;
+    public ProductTrader createNewTrader(ProductTrader productTrader) {
+        productTrader.setDateRegistration(LocalDate.now());
+        productManufactureRepository.save(productTrader);
+        return productTrader;
     }
 
     public void updateTrader(String userName, int rate, String cityStorage) throws ResponseException {
@@ -72,14 +75,50 @@ public class AdminService {
             throw new ResponseException("userName должен быть заполнен");
         if ((cityStorage != null && cityStorage.isEmpty() && rate == -1) || (cityStorage == null && rate == -1))
             throw new ResponseException("Нужна информация для обновления. Сейчас данные не переданы");
-       ProductManufacturer productManufacturer =  productManufactureRepository.findById(userName).orElse(null);
-       if(productManufacturer == null) throw new ResponseException("Продавец не зарегистрирован");
-        if(productManufacturer.getCityStorage().equals(cityStorage) && productManufacturer.getRate() == rate)
+       ProductTrader productTrader =  productManufactureRepository.findById(userName).orElse(null);
+       if(productTrader == null) throw new ResponseException("Продавец не зарегистрирован");
+        if(productTrader.getCityStorage().equals(cityStorage) && productTrader.getRate() == rate)
             throw new ResponseException("Данные не требуют обновления.Они идентичны сохранённым в БД");
-        if(rate != -1)productManufacturer.setRate(rate);
-        if(cityStorage != null)productManufacturer.setCityStorage(cityStorage);
-       productManufactureRepository.save(productManufacturer);
+        if(rate != -1) productTrader.setRate(rate);
+        if(cityStorage != null) productTrader.setCityStorage(cityStorage);
+       productManufactureRepository.save(productTrader);
     }
+
+    public  List<HistoryOrder>  getOrderTrader(String username, String typeFilter) {
+        List<HistoryOrder> historyOrderList = new ArrayList<>();
+        List<ProductCustomerOrder> productCustomerOrderList = productCustomerOrderRepository.findByProductTraderUserName(username);
+        List<Product> productList = null;
+        Map<CustomerOrder, List<Product>> productMap = new HashMap<>();
+        Map<CustomerOrder, Integer> customerOrderCountMap  = new HashMap<>();
+        for (ProductCustomerOrder productCustomerOrder : productCustomerOrderList) {
+
+            customerOrderCountMap.put(productCustomerOrder.getCustomerOrder(),productCustomerOrder.getCount());
+
+            if(productMap.containsKey(productCustomerOrder.getCustomerOrder())){
+                productMap.get(productCustomerOrder.getCustomerOrder() ).add(productCustomerOrder.getProduct());
+            } else{
+                List<Product> newProductList = new ArrayList<>();
+                newProductList.add(productCustomerOrder.getProduct());
+                productMap.put(productCustomerOrder.getCustomerOrder(),newProductList );
+            }
+
+        }
+        for (Map.Entry<CustomerOrder, List<Product>> customerOrderListEntry : productMap.entrySet()) {
+            CustomerOrder customerOrder = customerOrderListEntry.getKey();
+            int count = customerOrderCountMap.get(customerOrder);
+            Double billCustomerOrder = customerOrderListEntry.getValue().stream()
+                    .mapToDouble(product -> product.getPrice().doubleValue() * count).sum();
+
+
+            HistoryOrder historyOrder = new HistoryOrder(customerOrder.getCustomer(),
+                    customerOrderListEntry.getValue(), customerOrder.getStatus(),customerOrder.getDate(),
+                    customerOrder.getDateUpdateStatus(),BigDecimal.valueOf(billCustomerOrder),new Rate());
+//                    productCustomerOrderList.get(0).getProductTrader().getRate() );
+            historyOrderList.add(historyOrder);
+        }
+
+       return historyOrderList;
+    };
 }
 
 

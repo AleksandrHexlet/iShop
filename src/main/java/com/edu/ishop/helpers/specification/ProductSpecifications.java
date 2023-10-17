@@ -3,7 +3,7 @@ package com.edu.ishop.helpers.specification;
 import com.edu.ishop.helpers.entity.Category;
 import com.edu.ishop.helpers.entity.Product;
 import com.edu.ishop.helpers.entity.ProductManufactureId;
-import com.edu.ishop.helpers.entity.ProductManufacturer;
+import com.edu.ishop.helpers.entity.ProductTrader;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
@@ -43,7 +43,7 @@ public class ProductSpecifications {
                                                                                                    int quantity,
                                                                                                    double rating) {
         return (root, query, criteriaBuilder) -> {
-            Join<ProductManufacturer, Product> productManufacturerProductJoin = root.join("productManufacturer",
+            Join<ProductTrader, Product> productManufacturerProductJoin = root.join("productManufacturer",
                     JoinType.LEFT);
 
             return criteriaBuilder.and(
@@ -66,7 +66,7 @@ public class ProductSpecifications {
     ) {
         return (root, query, criteriaBuilder) -> {
             Join<Category, Product> categoryProductJoin = root.join("categoryProduct", JoinType.LEFT);
-            Join<ProductManufacturer, Product> ProductManufacturerCategoryJoin =
+            Join<ProductTrader, Product> ProductManufacturerCategoryJoin =
                     root.join("productManufacturer", JoinType.LEFT);
             return criteriaBuilder.and(
                     criteriaBuilder.equal(root.get("rating"), rating),
@@ -93,7 +93,7 @@ public class ProductSpecifications {
 
     public static Specification<Product> findProductActiveManufactureAndCountUpZero() {
         return (root, query, criteriaBuilder) -> {
-            Join<ProductManufacturer, Product> ProductProductManufacturerJoin =
+            Join<ProductTrader, Product> ProductProductManufacturerJoin =
                     root.join("productManufacturer", JoinType.LEFT);
             return criteriaBuilder.and(
                     criteriaBuilder.greaterThan(root.get("quantityStock"), 0),
@@ -115,7 +115,7 @@ public class ProductSpecifications {
            List<Predicate> predicates = new ArrayList<>();
         Join<Category,Product> productCategoryJoin = root.join("categoryProduct",JoinType.LEFT);
         if(namesManufacturer != null && namesManufacturer.size()>0){
-            Join<ProductManufacturer,Product>productProductManufacturerJoin = root.join("productManufacturer",JoinType.LEFT);
+            Join<ProductTrader,Product>productProductManufacturerJoin = root.join("productManufacturer",JoinType.LEFT);
             predicates.add(criteriaBuilder.lower(productProductManufacturerJoin.get("name"))
                             .in(namesManufacturer));
 //                            .in(namesManufacturer.stream().map((item)-> item.toLowerCase())));

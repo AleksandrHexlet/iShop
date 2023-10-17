@@ -2,7 +2,7 @@ package com.edu.ishop.helpers.deserializer;
 
 import com.edu.ishop.helpers.entity.Category;
 import com.edu.ishop.helpers.entity.Product;
-import com.edu.ishop.helpers.entity.ProductManufacturer;
+import com.edu.ishop.helpers.entity.ProductTrader;
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -24,17 +24,17 @@ public class ProductDeserialized  extends StdDeserializer<Product> {
     @Override
     public Product deserialize(JsonParser parser, DeserializationContext context) throws IOException, JacksonException {
         Product product = new Product();
-        ProductManufacturer productManufacturer = new ProductManufacturer();
+        ProductTrader productTrader = new ProductTrader();
         Category category = new Category();
         JsonNode node = parser.getCodec().readTree(parser);
-        productManufacturer.setName(node.get("productManufacturerName").asText());
-        productManufacturer.setCityStorage(node.get("productManufacturerCity").asText());
+        productTrader.setName(node.get("productManufacturerName").asText());
+        productTrader.setCityStorage(node.get("productManufacturerCity").asText());
         category.setId((Integer) node.get("categoryProductId").numberValue());
 
         product.setNameProduct(node.get("nameProduct").asText());
         product.setPrice(BigDecimal.valueOf((Double)node.get("price").numberValue()));
         product.setQuantityStock((Integer) node.get("quantityStock").numberValue());
-        product.setProductManufacturer(productManufacturer);
+        product.setProductManufacturer(productTrader);
         product.setCategoryProduct(category);
 
         return product;
