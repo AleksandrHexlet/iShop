@@ -22,14 +22,11 @@ public class RateService {
     Rate JuniorRate = new Rate("JuniorRate",true,false,false,100);
 
     @Bean
-    public CommandLineRunner createTable(){
+    public CommandLineRunner createTableRate(){
         return (args) -> {
-
             rateRepository.save(MaxRate);
             rateRepository.save(MiddleRate);
-
             rateRepository.save(JuniorRate);
-
         };
     }
 }

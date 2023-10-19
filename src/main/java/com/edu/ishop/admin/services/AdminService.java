@@ -5,8 +5,10 @@ import com.edu.ishop.helpers.entity.*;
 import com.edu.ishop.helpers.repository.*;
 import com.edu.ishop.helpers.exceptions.ResponseException;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-
+@Validated
 public class AdminService {
     ProductRepositoryAdmin productRepositoryAdmin;
     ProductManufactureRepository productManufactureRepository;
@@ -56,7 +58,7 @@ public class AdminService {
 
     }
 
-    public Category createNewCategory(Category category) throws ResponseException {
+    public Category createNewCategory(@Valid Category category) throws ResponseException {
         Category сategoryIsExist = categoryRepository.findByName(category.getName());
         if (сategoryIsExist != null) {
             throw new ResponseException("Категория с таким именем уже существует ");
@@ -71,7 +73,7 @@ public class AdminService {
         return productTrader;
     }
 
-    public void updateTrader(String userName, String  rate, String cityStorage) throws ResponseException {
+    public void updateTrader(@Size(min = 1, max = 99,message = "Нарушены требование к длине имени") String userName, String  rate, String cityStorage) throws ResponseException {
         if (userName == null)
             throw new ResponseException("userName должен быть заполнен");
         if ((cityStorage != null && cityStorage.isEmpty() && rate.equals("-1")) || (cityStorage == null && rate.equals("-1")))
@@ -85,7 +87,13 @@ public class AdminService {
        productManufactureRepository.save(productTrader);
     }
 
-    public  List<HistoryOrder>  getOrderTrader(String username, String typeFilter) {
+    public  List<HistoryOrder>  getOrderTrader(String username, String typeFilter
+//                                                  @FutureOrPresent @PastOrPresent  LocalDate date
+//                                                  @Min(0) @Max(99999) @Positive @Negative int something
+//                                                  List<@Size(min = 0, max = 56789) String> strList
+//                                                  List<@Min(0) @Max(12356789) @PositiveOrZero Integer> intList
+//                                                  List<@Valid Product> productList
+    ) {
         List<HistoryOrder> historyOrderList = new ArrayList<>();
         List<ProductCustomerOrder> productCustomerOrderList = productCustomerOrderRepository.findByProductTraderUserName(username);
         List<Product> productList = null;
