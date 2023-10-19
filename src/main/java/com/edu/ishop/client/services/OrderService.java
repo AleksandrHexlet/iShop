@@ -3,6 +3,7 @@ package com.edu.ishop.client.services;
 import com.edu.ishop.helpers.entity.CustomerOrder;
 import com.edu.ishop.helpers.exceptions.ResponseException;
 import com.edu.ishop.helpers.repository.OrderRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ public class OrderService {
         this.orderRepository = orderRepositoryOUT;
     }
 
-    public CustomerOrder postNewOrder(CustomerOrder customerOrder) throws ResponseException {
+    public CustomerOrder postNewOrder(@Valid CustomerOrder customerOrder) throws ResponseException {
         LocalDate dateCreated = LocalDate.now();
         CustomerOrder.OrderStatus status = CustomerOrder.OrderStatus.ORDER_ACCEPTED;
 

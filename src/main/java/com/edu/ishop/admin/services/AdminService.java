@@ -4,6 +4,7 @@ import com.edu.ishop.helpers.HistoryOrder;
 import com.edu.ishop.helpers.entity.*;
 import com.edu.ishop.helpers.repository.*;
 import com.edu.ishop.helpers.exceptions.ResponseException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ public class AdminService {
     }
 
 
-    public Product createNewProduct(Product product) throws ResponseException {
+    public Product createNewProduct(@Valid Product product) throws ResponseException {
         product.setDateAdded(LocalDate.now());
         ProductTrader productTrader = productManufactureRepository
                 .findById(product.getProductManufacturer().getUserName()).orElse(null);
@@ -44,7 +45,7 @@ public class AdminService {
         return prod;
     }
 
-    public Customer createNewCustomer(Customer customer) throws ResponseException {
+    public Customer createNewCustomer(@Valid Customer customer) throws ResponseException {
         Customer customerIsExist = customerRepositoryAdmin
                 .getCustomersByUserName(customer.getUserName()).get();
         if (customerIsExist != null) {
@@ -64,7 +65,7 @@ public class AdminService {
     }
 
 
-    public ProductTrader createNewTrader(ProductTrader productTrader) {
+    public ProductTrader createNewTrader(@Valid ProductTrader productTrader) {
         productTrader.setDateRegistration(LocalDate.now());
         productManufactureRepository.save(productTrader);
         return productTrader;
