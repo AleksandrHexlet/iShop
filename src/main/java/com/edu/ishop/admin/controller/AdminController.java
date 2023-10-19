@@ -73,9 +73,8 @@ public class AdminController {
 
     @PutMapping("/trader")
     public ResponseEntity<String> updateTrader(@RequestParam String userName,
-                                       @RequestParam(required = false, defaultValue = "") int rate,
+                                       @RequestParam(required = false, defaultValue = "-1") String rate,
                                        @RequestParam(required = false) String cityStorage ){
-        System.out.println("rate = " + rate);
 
         try {
             adminService.updateTrader(userName, rate, cityStorage);

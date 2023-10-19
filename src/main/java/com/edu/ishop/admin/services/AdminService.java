@@ -70,16 +70,16 @@ public class AdminService {
         return productTrader;
     }
 
-    public void updateTrader(String userName, int rate, String cityStorage) throws ResponseException {
+    public void updateTrader(String userName, String  rate, String cityStorage) throws ResponseException {
         if (userName == null)
             throw new ResponseException("userName должен быть заполнен");
-        if ((cityStorage != null && cityStorage.isEmpty() && rate == -1) || (cityStorage == null && rate == -1))
+        if ((cityStorage != null && cityStorage.isEmpty() && rate.equals("-1")) || (cityStorage == null && rate.equals("-1")))
             throw new ResponseException("Нужна информация для обновления. Сейчас данные не переданы");
        ProductTrader productTrader =  productManufactureRepository.findById(userName).orElse(null);
        if(productTrader == null) throw new ResponseException("Продавец не зарегистрирован");
         if(productTrader.getCityStorage().equals(cityStorage) && productTrader.getRate() == rate)
             throw new ResponseException("Данные не требуют обновления.Они идентичны сохранённым в БД");
-        if(rate != -1) productTrader.setRate(rate);
+        if(!rate.equals("-1")) productTrader.setRate(rate);
         if(cityStorage != null) productTrader.setCityStorage(cityStorage);
        productManufactureRepository.save(productTrader);
     }

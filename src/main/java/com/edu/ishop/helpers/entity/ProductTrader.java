@@ -22,7 +22,7 @@ public class ProductTrader {
     @Positive()
     @DecimalMin(value = "1")
     private BigDecimal traderBill;
-    private int rate;
+    private String rate;
 
 
     //    @Id
@@ -33,7 +33,7 @@ public class ProductTrader {
     }
 
     public ProductTrader(String name, String userName, LocalDate dateRegistration,
-                         double rating, BigDecimal traderBill, int rate, String cityStorage,
+                         double rating, BigDecimal traderBill, String rate, String cityStorage,
                          boolean isActive) {
         this.name = name;
         this.userName = userName;
@@ -89,11 +89,11 @@ public class ProductTrader {
         this.traderBill = traderBill;
     }
 
-    public int getRate() {
+    public String getRate() {
         return rate;
     }
 
-    public void setRate(int rate) {
+    public void setRate(String rate) {
         this.rate = rate;
     }
 
