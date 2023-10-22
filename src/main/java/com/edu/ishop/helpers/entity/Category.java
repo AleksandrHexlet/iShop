@@ -8,10 +8,8 @@ import jakarta.validation.constraints.Size;
 @Entity
 @Table(name="tb_categories")
 //@JsonDeserialize(using = CategoryDeserialized.class)
-public class Category {
-    @Id
-    @GeneratedValue
-    private int id;
+public class Category extends IdData {
+
     @Column(nullable = false,length = 3456)
     @Size(min=2,max= 199, message = "Длина имени категории должна быть равен или более 2 символам и менее 199 символов")
     private String name;
@@ -34,9 +32,7 @@ public class Category {
 
     //Геттеры необходимы, чтобы приватные поля попали в JSON и в последствии в Базу данных.
     // Если свойства у entity класса приватные и нет геттеров, они не попадут в json.
-    public int getId() {
-        return id;
-    }
+
 
     public String getName() {
         return name;
@@ -50,9 +46,7 @@ public class Category {
         return parent;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+
 
     public void setName(String name) {
         this.name = name;
@@ -69,7 +63,7 @@ public class Category {
     @Override
     public String toString() {
         return "Category{" +
-                "id=" + id +
+
                 ", name='" + name + '\'' +
                 ", url='" + url + '\'' +
                 ", parent=" + parent +

@@ -4,6 +4,7 @@ import com.edu.ishop.helpers.entity.Category;
 import com.edu.ishop.helpers.repository.CategoryRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,7 @@ public class CategoryControllerHTML {
         this.categoryRepository = categoryRepository;
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/category")
     public String getCategoryHTML(Category category, Model model){
     Iterable<Category> categories = categoryRepository.findAll();

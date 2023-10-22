@@ -2,13 +2,12 @@ package com.edu.ishop.admin.controller;
 
 import com.edu.ishop.admin.services.AdminService;
 import com.edu.ishop.helpers.HistoryOrder;
-import com.edu.ishop.helpers.entity.Category;
-import com.edu.ishop.helpers.entity.Customer;
-import com.edu.ishop.helpers.entity.Product;
-import com.edu.ishop.helpers.entity.ProductTrader;
+import com.edu.ishop.helpers.entity.*;
 import com.edu.ishop.helpers.exceptions.ResponseException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +22,7 @@ import java.util.List;
 public class AdminController {
 
     private AdminService adminService;
+
 
     @Autowired
     public AdminController(AdminService adminServiceOUT) {
@@ -83,5 +83,6 @@ public class AdminController {
             throw new ResponseStatusException(HttpStatus.NOT_MODIFIED, e.getMessage());
         }
     }
+
 
 }

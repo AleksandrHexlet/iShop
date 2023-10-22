@@ -12,14 +12,18 @@ public class Role {
     RoleType roleType;
 
 
-
     public enum RoleType {
-        ADMIN,
-        CUSTOMER,
-        TRADER,
-        READONLY_ADMIN,
+        ROLE_ADMIN,
+        ROLE_CUSTOMER,
+        ROLE_TRADER,
+        ROLE_READONLY_ADMIN,
     }
 
+    public RoleType getRoleType() {
+        return roleType;
+    }
 
-
+    public void setRoleType(RoleType roleType) {
+        this.roleType = roleType;
+    }
 }

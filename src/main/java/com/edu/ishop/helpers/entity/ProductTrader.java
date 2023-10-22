@@ -10,13 +10,10 @@ import java.time.LocalDate;
 
 @Entity
 //@IdClass(ProductManufactureId.class)
-public class ProductTrader {
-
-    //    @Id
+@PrimaryKeyJoinColumn(name = "traderId")
+public class ProductTrader  extends  LoginData{
     @Size(min = 2, max = 199, message = "Длина имени категории должна быть равен или более 2 символам и менее 199 символов")
     private String name;
-    @Id
-    private String userName;
     private LocalDate dateRegistration;
     private double rating;
     @Positive()
@@ -36,7 +33,6 @@ public class ProductTrader {
                          double rating, BigDecimal traderBill, String rate, String cityStorage,
                          boolean isActive) {
         this.name = name;
-        this.userName = userName;
         this.dateRegistration = dateRegistration;
         this.rating = rating;
         this.traderBill = traderBill;
@@ -59,14 +55,6 @@ public class ProductTrader {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public LocalDate getDateRegistration() {

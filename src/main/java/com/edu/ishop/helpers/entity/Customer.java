@@ -7,14 +7,14 @@ import java.util.List;
 
 @Entity
 //@Table(name = "Customer")
-public class Customer {
-    @Id
-    @GeneratedValue
-    private int id;
+@PrimaryKeyJoinColumn(name = "customerId") // от стратегии JOINED
+// @DiscriminatorValue("12345") //от стратегии   SINGLE_TABLE
+public class Customer extends LoginData {
+//    @Id  // убрали id из-за стратегии наследования JOINED в LOGINDATA
+//    @GeneratedValue
+//    private int id;
     @OneToMany(mappedBy="customer")
     private List<FeedBack> feedBack = new ArrayList<>();
-    private String userName;
-    private String userPassword;
 
     private String name;
     private String city;
@@ -26,29 +26,20 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(int id, List<FeedBack> feedBack, String userName, String userPassword, String name, String city) {
-        this.id = id;
+    public Customer( List<FeedBack> feedBack, String userName, String userPassword, String name, String city) {
+//        setId(id);
         this.feedBack = feedBack;
-        this.userName = userName;
-        this.userPassword = userPassword;
+
         this.name = name;
         this.city = city;
     }
 
-    public int getId() {
-        return id;
-    }
+//    public int getId() {
+//        return id;
+//    }
 
     public List<FeedBack> getFeedBack() {
         return feedBack;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getUserPassword() {
-        return userPassword;
     }
 
     public String getName() {
@@ -59,21 +50,16 @@ public class Customer {
         return city;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+//    public void setId(int id) {
+//        this.id = id;
+//    }
 
     public void setFeedBack(List<FeedBack> feedBack) {
         this.feedBack = feedBack;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
-    }
+
 
     public void setName(String name) {
         this.name = name;

@@ -1,11 +1,13 @@
 package com.edu.ishop.helpers.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 @Entity
+//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // у каждого класса своя таблица, но в стратегии дублируются поля логин дата как при обычном наследовании
+@Inheritance(strategy = InheritanceType.JOINED) //у LoginData своя таблица, у каждого наследника своя таблица и между ними связь oneTOone
+//@Inheritance(strategy = InheritanceType.SINGLE_TABLE) // родитель и все наследники хранятся в одной таблице. У каждой строки будет доп столбец под названием DTYPE (столбец дискриминатора discriminator column) в котором будет запись кому принадлежат данные ( название сущности. Customer or FeedBack or Product or LoginData и т д)
+//@DiscriminatorColumn(name = "Descriptor", discriminatorType = DiscriminatorType.INTEGER) // переименовываем поле DTYPE, для каждого наследника надо поставить анннотацию @DiscriminatorValue("12345")
+
 public class LoginData {
     @Id
     @GeneratedValue
@@ -39,5 +41,13 @@ public class LoginData {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
