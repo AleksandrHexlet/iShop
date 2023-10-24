@@ -1,6 +1,7 @@
 package com.edu.ishop.helpers.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,9 @@ public class Customer extends LoginData {
     @OneToMany(mappedBy="customer")
     private List<FeedBack> feedBack = new ArrayList<>();
 
+    @Size(min = 2,max = 99)
     private String name;
+    @Size(min = 2,max = 29)
     private String city;
 
     @OneToMany(mappedBy="customer")

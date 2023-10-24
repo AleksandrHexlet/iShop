@@ -1,6 +1,7 @@
 package com.edu.ishop.helpers.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 @Entity
 //@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // у каждого класса своя таблица, но в стратегии дублируются поля логин дата как при обычном наследовании
@@ -13,7 +14,9 @@ public class LoginData {
     @GeneratedValue
     private int id;
 
+    @Size(min = 2,max = 99)
     private String userName;
+    @Size(min = 2,max = 99)
     private String password;
     @OneToOne
     private Role role;

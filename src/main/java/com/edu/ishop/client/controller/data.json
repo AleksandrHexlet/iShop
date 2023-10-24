@@ -50,6 +50,13 @@
     "url": "http://MSK.parent.food.com"
   }
 
+  // customer
+  {
+    "userName":"Petr",
+    "password":"12345",
+    "city":"Moscow",
+    "name": "BatmenPetya"
+  }
 
 
 ]
