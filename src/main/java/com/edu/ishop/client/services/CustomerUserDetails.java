@@ -1,10 +1,9 @@
-package com.edu.ishop.admin.services;
+package com.edu.ishop.client.services;
 
 import com.edu.ishop.helpers.entity.Customer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;

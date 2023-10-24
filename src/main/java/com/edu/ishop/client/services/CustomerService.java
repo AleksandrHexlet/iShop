@@ -1,7 +1,5 @@
 package com.edu.ishop.client.services;
 
-import com.edu.ishop.admin.services.CustomerUserDetails;
-import com.edu.ishop.admin.services.JwtSecurityService;
 import com.edu.ishop.helpers.entity.Customer;
 import com.edu.ishop.helpers.entity.Role;
 import com.edu.ishop.helpers.exceptions.ResponseException;
@@ -10,7 +8,6 @@ import com.edu.ishop.helpers.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

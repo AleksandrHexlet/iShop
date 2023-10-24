@@ -1,4 +1,4 @@
-package com.edu.ishop.admin.services;
+package com.edu.ishop.client.services;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

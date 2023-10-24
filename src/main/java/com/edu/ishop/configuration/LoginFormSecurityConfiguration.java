@@ -1,8 +1,8 @@
 package com.edu.ishop.configuration;
 
-import com.edu.ishop.admin.services.CustomerDetailsService;
-import com.edu.ishop.admin.services.JwtAuthenticationFilter;
 import com.edu.ishop.admin.services.LoginDataDetailsService;
+import com.edu.ishop.client.services.CustomerDetailsService;
+import com.edu.ishop.client.services.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,5 @@
-package com.edu.ishop.admin.services;
+package com.edu.ishop.client.services;
 
-import com.edu.ishop.configuration.LoginFormSecurityConfiguration;
 import com.edu.ishop.helpers.entity.Customer;
 import com.edu.ishop.helpers.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
