@@ -10,7 +10,8 @@ import jakarta.validation.constraints.Size;
 //@JsonDeserialize(using = CategoryDeserialized.class)
 public class Category extends IdData {
 
-    @Column(nullable = false,length = 3456)
+//    @Column(nullable = false,length = 199)
+    @Column(nullable = false)
     @Size(min=2,max= 199, message = "Длина имени категории должна быть равен или более 2 символам и менее 199 символов")
     private String name;
     @Column(unique = true,nullable = false,columnDefinition = "TEXT NOT NULL")

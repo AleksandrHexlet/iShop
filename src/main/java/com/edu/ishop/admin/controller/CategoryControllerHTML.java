@@ -5,13 +5,14 @@ import com.edu.ishop.helpers.repository.CategoryRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.access.prepost.PreFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class CategoryControllerHTML {
 
-    CategoryRepository categoryRepository;
+    private CategoryRepository categoryRepository;
 
     @Autowired
 
@@ -28,17 +29,21 @@ public class CategoryControllerHTML {
         this.categoryRepository = categoryRepository;
     }
 
-    @Secured("ROLE_ADMIN")
+//    @PreFilter(value = "spql-синтаксис")
+//    @PostFilter(value = "spql-синтаксис")
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/category")
-    public String getCategoryHTML(Category category, Model model){
-    Iterable<Category> categories = categoryRepository.findAll();
-    model.addAttribute("categoriesAttr",categories);
-    return "CategoryWebHTML";
-    };
+    public String getCategoryHTML(Category category, Model model) {
+        Iterable<Category> categories = categoryRepository.findAll();
+        model.addAttribute("categoriesAttr", categories);
+        return "CategoryWebHTML";
+    }
 
-    @PostMapping ("/category")
-    public String postCategoryHTML(@Valid Category category, BindingResult bindingResult){
-        if(bindingResult.hasErrors()) return "CategoryWebHTML";
+    ;
+
+    @PostMapping("/category")
+    public String postCategoryHTML(@Valid Category category, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) return "CategoryWebHTML";
         categoryRepository.save(category);
         return "redirect:/adminHTML/category";
     }

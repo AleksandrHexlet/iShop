@@ -22,6 +22,7 @@ public class Customer extends LoginData {
     @Size(min = 2,max = 29)
     private String city;
 
+
     @OneToMany(mappedBy="customer")
     private List<CustomerOrder> order = new ArrayList<>();
 

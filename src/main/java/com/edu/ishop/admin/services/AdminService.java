@@ -73,7 +73,8 @@ public class AdminService {
         return productTrader;
     }
 
-    public void updateTrader(@Size(min = 1, max = 99,message = "Нарушены требование к длине имени") String userName, String  rate, String cityStorage) throws ResponseException {
+    public void updateTrader(@Size(min = 1, max = 99,message = "Нарушены требование к длине имени") String userName,
+                             String  rate, String cityStorage) throws ResponseException {
         if (userName == null)
             throw new ResponseException("userName должен быть заполнен");
         if ((cityStorage != null && cityStorage.isEmpty() && rate.equals("-1")) || (cityStorage == null && rate.equals("-1")))
