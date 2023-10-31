@@ -21,12 +21,12 @@ import java.util.Map;
 @Validated
 public class AdminService {
     ProductRepositoryAdmin productRepositoryAdmin;
-    ProductManufactureRepository productManufactureRepository;
+    ProductTraderRepository productManufactureRepository;
     CategoryRepository categoryRepository;
     CustomerRepositoryAdmin customerRepositoryAdmin;
     ProductCustomerOrderRepository productCustomerOrderRepository;
     @Autowired
-    public AdminService(ProductCustomerOrderRepository productCustomerOrderRepository,ProductRepositoryAdmin productRepositoryAdmin, ProductManufactureRepository productManufactureRepository, CategoryRepository categoryRepository, CustomerRepositoryAdmin customerRepositoryAdmin) {
+    public AdminService(ProductCustomerOrderRepository productCustomerOrderRepository, ProductRepositoryAdmin productRepositoryAdmin, ProductTraderRepository productManufactureRepository, CategoryRepository categoryRepository, CustomerRepositoryAdmin customerRepositoryAdmin) {
         this.productRepositoryAdmin = productRepositoryAdmin;
         this.productManufactureRepository = productManufactureRepository;
         this.categoryRepository = categoryRepository;

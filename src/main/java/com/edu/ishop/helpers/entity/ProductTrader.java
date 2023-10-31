@@ -3,6 +3,7 @@ package com.edu.ishop.helpers.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
@@ -16,8 +17,8 @@ public class ProductTrader  extends  LoginData{
     private String name;
     private LocalDate dateRegistration;
     private double rating;
-    @Positive()
-    @DecimalMin(value = "1")
+    @PositiveOrZero
+//    @DecimalMin(value = "0")
     private BigDecimal traderBill;
     private String rate;
 

@@ -4,7 +4,7 @@ package com.edu.ishop.client.services;
 import com.edu.ishop.helpers.exceptions.ResponseException;
 import com.edu.ishop.helpers.repository.CategoryRepository;
 import com.edu.ishop.helpers.repository.FeedBackRepository;
-import com.edu.ishop.helpers.repository.ProductManufactureRepository;
+import com.edu.ishop.helpers.repository.ProductTraderRepository;
 import com.edu.ishop.helpers.repository.ProductRepository;
 import com.edu.ishop.helpers.entity.*;
 import org.apache.poi.ss.usermodel.*;
@@ -30,7 +30,7 @@ import static com.edu.ishop.helpers.specification.ProductSpecifications.*;
 @Service
 public class ProductService {
     ProductRepository productRepository;
-    ProductManufactureRepository productManufactureRepository;
+    ProductTraderRepository productManufactureRepository;
     CategoryService categoryService;
     CategoryRepository categoryRepository;
 
@@ -39,7 +39,7 @@ public class ProductService {
     FeedBack feedBack;
 
     @Autowired
-    public ProductService(CategoryRepository categoryRepository, ProductManufactureRepository productManufactureRepository, FeedBackRepository feedBackRepository, ProductRepository productRepository, CategoryService categoryService, List<Product> productList, FeedBack feedBack) {
+    public ProductService(CategoryRepository categoryRepository, ProductTraderRepository productManufactureRepository, FeedBackRepository feedBackRepository, ProductRepository productRepository, CategoryService categoryService, List<Product> productList, FeedBack feedBack) {
         this.productRepository = productRepository;
         this.productManufactureRepository = productManufactureRepository;
         this.feedBackRepository = feedBackRepository;
