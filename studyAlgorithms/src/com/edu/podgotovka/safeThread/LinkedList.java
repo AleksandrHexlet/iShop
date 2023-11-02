@@ -56,15 +56,14 @@ public class LinkedList<T> {
         } else {
             Node<T> temp = first;
             for (int i = 0; i <= nodeLength; i++) {
-                if(temp.nodeNext == null){
+                if (temp.nodeNext == null) {
                     temp.nodeNext = node;
                     temp.nodePrevios = temp;
                     nodeLength++;
-                } else{
-                    temp= temp.nodeNext;
+                } else {
+                    temp = temp.nodeNext;
 
                 }
-
 
 
 //                if (temp.nodeNext != null) {
@@ -146,23 +145,51 @@ public class LinkedList<T> {
 
     }
 
-    public T reverse() {
-        if (first == null) return null;
-        Node<T> firstElement = new Node<>(first.element);
-        Node<T> temp = first;
-        Node<T> end = null;
 
-        while (temp != end) {
-            Node<T> ElementNext = temp.nodeNext; // 1
-            Node<T> Elementprevios = firstElement.nodeNext;      // 1
+    public T addNodeBiderectionalList(T element) {
+//        Node<T> first = new Node<T>();
+//        Node<T> last = new Node<T>();
+//        Node<T> temp = new Node<T>();
+        Node<T> newNode = new Node<T>(element);
 
-            firstElement.nodeNext = temp; // 1 = 0
-            temp.nodeNext = Elementprevios; // 1 = 1
+        if (first == null) {
+            first = newNode;
+            last = newNode;
+            first.nodeNext = last;
+            last.nodePrevios = first;
+        } else{
+            Node<T> temp = new Node<T>();
+            last.nodeNext = newNode;
+            newNode.nodePrevios = last;
+            last = newNode;
 
-            temp = ElementNext; // 1 = 2
         }
-        return null;
+
+
+//  1   2  3  4
+
+
     }
+
+//    public T reverse() {
+//        if (first == null) return null;
+//        Node<T> firstElement = new Node<>(first.element);
+//        Node<T> temp = first;
+//        Node<T> end = null;
+//
+//        while (temp != end) {
+//            Node<T> ElementNext = temp.nodeNext; // 1
+//            Node<T> Elementprevios = firstElement.nodeNext;      // 1
+//
+//            firstElement.nodeNext = temp; // 1 = 0
+//            temp.nodeNext = Elementprevios; // 1 = 1
+//
+//            temp = ElementNext; // 1 = 2
+//
+//            //
+//        }
+//        return null;
+//    }
 
 //    public T reverse(){
 //        if(first == null) return null;
