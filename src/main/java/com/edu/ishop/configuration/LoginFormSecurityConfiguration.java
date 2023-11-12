@@ -111,7 +111,8 @@ public class LoginFormSecurityConfiguration {
         return http.build();
     }
 
-    @Bean("Vasya")
+//    @Bean("Vasya")
+    @Bean
 
     public DaoAuthenticationProvider authenticationProviderCustomer() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
