@@ -22,6 +22,7 @@ public class TraderController {
 
     @PostMapping("/registration")
     public ResponseEntity<String> traderRegistration(@Valid @RequestBody ProductTrader productTrader){
+        System.out.println("productTrader === " + productTrader);
         try{
             traderService.traderRegistration(productTrader);
             return ResponseEntity.ok("Продавец успешно зарегистрирован");

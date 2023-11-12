@@ -4,8 +4,11 @@ import com.edu.ishop.admin.services.LoginDataDetailsService;
 import com.edu.ishop.client.services.CustomerDetailsService;
 import com.edu.ishop.client.services.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -34,7 +37,13 @@ public class LoginFormSecurityConfiguration {
     @Autowired
     public LoginFormSecurityConfiguration(LoginDataDetailsService loginDataDetailService,
                                           CustomerDetailsService customerDetailsService,
-                                          JwtAuthenticationFilter jwtAuthenticationFilter) {
+                                          JwtAuthenticationFilter jwtAuthenticationFilter
+
+
+//                           @Qualifier(value = "Vasya") DaoAuthenticationProvider Vasya123
+
+
+    ) {
         this.loginDataDetailService = loginDataDetailService;
         this.customerDetailsService = customerDetailsService;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
@@ -43,13 +52,49 @@ public class LoginFormSecurityConfiguration {
 
 
 
-    @Bean
+    @Bean("Vasya")
+
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    @Order(1)
+    public SecurityFilterChain filterChainCustomer(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .securityMatcher("/api/customer/**")
+                .authorizeHttpRequests((authorize) -> authorize
+                                .dispatcherTypeMatchers(FORWARD, ERROR).permitAll()
+                                .requestMatchers("/api/customer/registration", "/api/customer/authorization").permitAll()
+                                .requestMatchers("/api/customer/**").hasRole("CUSTOMER")
+//                        .anyRequest().authenticated()
+                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProviderCustomer())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
+
+    @Bean
+    @Order(2)
+    public SecurityFilterChain filterChainTrader(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .securityMatcher("/api/trader/**")
+                .authorizeHttpRequests((authorize) -> authorize
+                                .dispatcherTypeMatchers(FORWARD, ERROR).permitAll()
+                                .requestMatchers("/api/trader/registration").permitAll()
+//                                .requestMatchers("/trader/**").hasAnyRole("TRADER", "ADMIN")
+//                        .anyRequest().authenticated()
+                );
+        return http.build();
+    }
+
+    @Bean
+    @Order(3)
+    public SecurityFilterChain filterChainAdmin(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
                                 .dispatcherTypeMatchers(FORWARD, ERROR).permitAll()
@@ -62,27 +107,28 @@ public class LoginFormSecurityConfiguration {
                         .loginPage("/adminHTML/login").failureUrl("/adminHTML/login?failed")
                         .loginProcessingUrl("/adminHTML/login").defaultSuccessUrl("/adminHTML/account").permitAll())
                 .logout(logout -> logout.logoutUrl("/adminHTML/logout")
-                        .logoutSuccessUrl("/adminHTML/login").permitAll())
-                .authorizeHttpRequests((authorize) -> authorize
-                        .dispatcherTypeMatchers(FORWARD, ERROR).permitAll()
-                        .requestMatchers("/api/customer/registration", "/api/customer/authorization").permitAll()
-                        .requestMatchers("/api/customer/**").hasRole("CUSTOMER")
-                )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
+                        .logoutSuccessUrl("/adminHTML/login").permitAll());
         return http.build();
     }
 
+    @Bean("Vasya")
 
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
+    public DaoAuthenticationProvider authenticationProviderCustomer() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(customerDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
+
+//    @Bean("Petya")
+//    public DaoAuthenticationProvider authenticationProviderDefault() {
+//        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+//        authProvider.setUserDetailsService(customerDetailsService);
+//        authProvider.setPasswordEncoder(passwordEncoder());
+//        return authProvider;
+//    }
+
+//    LoginDataDetailsService
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
