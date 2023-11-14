@@ -56,7 +56,12 @@ public class CustomerService {
     public void customerRegistration(Customer customer) throws ResponseException {
         if (customerRepository.existsByUserName(customer.getUserName()))
             throw new ResponseException("Пользователь с таким именем уже зарегистрирован");
-        Role role = roleRepository.findByRoleType(Role.RoleType.ROLE_CUSTOMER);
+        Role role = roleRepository.findByRoleType(Role.RoleType.ROLE_CUSTOMER).orElseGet(()->{
+            Role roleCustomer = new Role();
+            roleCustomer.setRoleType(Role.RoleType.ROLE_TRADER);
+            roleRepository.save(roleCustomer);
+            return roleCustomer;
+        });
         customer.setRole(role);
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         customerRepository.save(customer);

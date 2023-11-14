@@ -70,7 +70,7 @@ public class ProductService {
         ZonedDateTime zonedDT11 = ZonedDateTime.parse("2010-10-10T18:30:45+01:00[Europe/London]");
         ZonedDateTime zonedDT12 = ZonedDateTime.parse("2011-04-22T08:40:15+10:00[Australia/Sydney]", DateTimeFormatter.ISO_DATE_TIME);
 
-        ProductTrader productTrader1 = new ProductTrader("MilkCorp", "Russia",
+        ProductTrader productTrader1 = new ProductTrader("MilkCorp",
                 date2015, 4.9, new BigDecimal("4.789"), "MaxRate", "MSK", true);
         productManufactureRepository.save(productTrader1);
         Customer customer = new Customer();

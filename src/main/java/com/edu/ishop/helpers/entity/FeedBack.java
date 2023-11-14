@@ -19,6 +19,7 @@ public class FeedBack {
     @Column(nullable = false)
     private String text;
 
+
     @ManyToOne
     @JoinColumn(nullable = false)
     @JsonIgnore

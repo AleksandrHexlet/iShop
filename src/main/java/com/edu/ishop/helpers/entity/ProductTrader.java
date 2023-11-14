@@ -16,13 +16,14 @@ public class ProductTrader  extends  LoginData{
     @Size(min = 2, max = 199, message = "Длина имени категории должна быть равен или более 2 символам и менее 199 символов")
     private String name;
     private LocalDate dateRegistration;
-    private double rating;
+    private double storeQualityIndex;
     @PositiveOrZero
 //    @DecimalMin(value = "0")
     private BigDecimal traderBill;
     private String rate;
 
-
+  @ManyToOne
+  TraderRating traderRating;
     //    @Id
     private String cityStorage;
     private boolean isActive = true;
@@ -30,12 +31,12 @@ public class ProductTrader  extends  LoginData{
     public ProductTrader() {
     }
 
-    public ProductTrader(String name, String userName, LocalDate dateRegistration,
-                         double rating, BigDecimal traderBill, String rate, String cityStorage,
+    public ProductTrader(String name, LocalDate dateRegistration,
+                         double storeQualityIndex, BigDecimal traderBill, String rate, String cityStorage,
                          boolean isActive) {
         this.name = name;
         this.dateRegistration = dateRegistration;
-        this.rating = rating;
+        this.storeQualityIndex = storeQualityIndex;
         this.traderBill = traderBill;
         this.rate = rate;
         this.cityStorage = cityStorage;
@@ -46,44 +47,16 @@ public class ProductTrader  extends  LoginData{
         return name;
     }
 
-    public String getCity() {
-        return cityStorage;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    public LocalDate getDateRegistration() {
-        return dateRegistration;
+    public double getStoreQualityIndex() {
+        return storeQualityIndex;
     }
 
-    public double getRating() {
-        return rating;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
-    }
-
-    public BigDecimal getTraderBill() {
-        return traderBill;
-    }
-
-    public void setTraderBill(BigDecimal traderBill) {
-        this.traderBill = traderBill;
-    }
-
-    public String getRate() {
-        return rate;
-    }
-
-    public void setRate(String rate) {
-        this.rate = rate;
+    public void setStoreQualityIndex(double storeQualityIndex) {
+        this.storeQualityIndex = storeQualityIndex;
     }
 
     public String getCityStorage() {
@@ -103,3 +76,4 @@ public class ProductTrader  extends  LoginData{
     }
 }
 
+// http://127.0.0.1:9090/oauth2/authorize?response_type=code&client_id=$2a$10$dU8slMdM5sMSIDwI75sJeuwgdxr0DtfY28YhL.spiTYKLYTwNxmXK&redirect_uri=http://localhost:8888&scope=openid read

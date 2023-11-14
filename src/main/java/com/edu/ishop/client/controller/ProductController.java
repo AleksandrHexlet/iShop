@@ -2,6 +2,7 @@ package com.edu.ishop.client.controller;
 
 import com.edu.ishop.helpers.entity.FeedBack;
 import com.edu.ishop.helpers.entity.Product;
+import com.edu.ishop.helpers.entity.TraderRating;
 import com.edu.ishop.helpers.exceptions.ResponseException;
 import com.edu.ishop.client.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +69,7 @@ public class ProductController {
     }
 
     @PostMapping("/feedback")
-    public ResponseEntity<FeedBack> getProductsByNames(@RequestParam int idProduct, @RequestParam String textFeedback) {
+    public ResponseEntity<FeedBack> getProductsByNames(@RequestParam int idProduct, @RequestParam String textFeedback, @RequestParam TraderRating traderRating) {
 
         FeedBack feedBack = productService.addFeedBackToProduct(idProduct, textFeedback);
         return new ResponseEntity<FeedBack>(feedBack, HttpStatus.CREATED);
