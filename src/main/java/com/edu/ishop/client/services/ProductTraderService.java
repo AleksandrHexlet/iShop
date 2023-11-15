@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 
 @Service
-public class TraderService {
+public class ProductTraderService {
     private ProductTraderRepository productTraderRepository;
     private LoginDataRepository loginDataRepository;
     private RoleRepository roleRepository;
@@ -22,10 +22,10 @@ public class TraderService {
     private PasswordEncoder encoderPassword;
 
 @Autowired
-    public TraderService(ProductTraderRepository productTraderRepository,
-                         LoginDataRepository loginDataRepository,
-                         RoleRepository roleRepository,
-                         PasswordEncoder loginFormSecurityConfigurationEncoderPassword) {
+    public ProductTraderService(ProductTraderRepository productTraderRepository,
+                                LoginDataRepository loginDataRepository,
+                                RoleRepository roleRepository,
+                                PasswordEncoder loginFormSecurityConfigurationEncoderPassword) {
         this.productTraderRepository = productTraderRepository;
         this.loginDataRepository = loginDataRepository;
         this.roleRepository = roleRepository;

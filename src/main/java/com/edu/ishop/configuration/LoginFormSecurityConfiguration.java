@@ -91,9 +91,25 @@ public class LoginFormSecurityConfiguration {
                 );
         return http.build();
     }
-
     @Bean
     @Order(3)
+    public SecurityFilterChain filterChainProduct(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .securityMatcher("/product/**")
+                .authorizeHttpRequests((authorize) -> authorize
+                                .dispatcherTypeMatchers(FORWARD, ERROR).permitAll()
+                                .requestMatchers("/product/**").permitAll()
+
+//                        .anyRequest().authenticated()
+                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProviderCustomer())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
+    @Bean
+    @Order(4)
     public SecurityFilterChain filterChainAdmin(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
@@ -110,6 +126,8 @@ public class LoginFormSecurityConfiguration {
                         .logoutSuccessUrl("/adminHTML/login").permitAll());
         return http.build();
     }
+
+
 
 //    @Bean("Vasya")
     @Bean

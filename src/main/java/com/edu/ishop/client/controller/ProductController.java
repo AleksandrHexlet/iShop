@@ -1,5 +1,6 @@
 package com.edu.ishop.client.controller;
 
+import com.edu.ishop.client.services.TraderRatingService;
 import com.edu.ishop.helpers.entity.FeedBack;
 import com.edu.ishop.helpers.entity.Product;
 import com.edu.ishop.helpers.entity.TraderRating;
@@ -20,10 +21,12 @@ import java.util.List;
 
 public class ProductController {
     private ProductService productService;
+    private TraderRatingService traderRatingService;
 
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, TraderRatingService traderRatingService) {
         this.productService = productService;
+        this.traderRatingService = traderRatingService;
     }
 
     @GetMapping("/category/{urlCategory}")
@@ -37,8 +40,8 @@ public class ProductController {
 
 
         List<String> namesManufacturerArr = new ArrayList<>();
-        if(namesManufacturer.length() > 0){
-             namesManufacturerArr = List.of(namesManufacturer.split(","));
+        if (namesManufacturer.length() > 0) {
+            namesManufacturerArr = List.of(namesManufacturer.split(","));
         }
 
 //        return productService.getProductList(urlCategory);
@@ -69,9 +72,16 @@ public class ProductController {
     }
 
     @PostMapping("/feedback")
-    public ResponseEntity<FeedBack> getProductsByNames(@RequestParam int idProduct, @RequestParam String textFeedback, @RequestParam TraderRating traderRating) {
+    public ResponseEntity<FeedBack> getProductsByNames(@RequestParam int idProduct,
+                                                       @RequestParam String textFeedback,
+                                                       @RequestParam String productTraderName,
+                                                       @RequestParam String comments,
+                                                       @RequestParam int traderRate ) {
+
 
         FeedBack feedBack = productService.addFeedBackToProduct(idProduct, textFeedback);
+        TraderRating traderRating = new TraderRating( productTraderName,  comments, traderRate);
+        traderRatingService.calculateTraderQualityIndex(traderRating);
         return new ResponseEntity<FeedBack>(feedBack, HttpStatus.CREATED);
     }
 
@@ -106,15 +116,14 @@ public class ProductController {
     ;
 
     @PostMapping("/uploadExcel")
-    public List<String> uploadProducts(@RequestParam MultipartFile file, @RequestParam String userNameTrader){
+    public List<String> uploadProducts(@RequestParam MultipartFile file, @RequestParam String userNameTrader) {
         try {
-            return  productService.uploadProducts(file, userNameTrader);
+            return productService.uploadProducts(file, userNameTrader);
         } catch (ResponseException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
         }
 
     }
-
 
 
 }

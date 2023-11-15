@@ -13,7 +13,7 @@ public class FeedBack {
     @Id
     @GeneratedValue
     private int id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Customer customer;
     private ZonedDateTime timeAdded;
     @Column(nullable = false)

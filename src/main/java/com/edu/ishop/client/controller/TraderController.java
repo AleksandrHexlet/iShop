@@ -1,30 +1,28 @@
 package com.edu.ishop.client.controller;
 
-import com.edu.ishop.client.services.TraderService;
+import com.edu.ishop.client.services.ProductTraderService;
 import com.edu.ishop.helpers.entity.ProductTrader;
 import com.edu.ishop.helpers.exceptions.ResponseException;
-import jakarta.persistence.Entity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/trader")
 public class TraderController {
-   private TraderService traderService;
+   private ProductTraderService productTraderService;
 
     @Autowired
-    public TraderController(TraderService traderService) {
-        this.traderService = traderService;
+    public TraderController(ProductTraderService productTraderService) {
+        this.productTraderService = productTraderService;
     }
 
     @PostMapping("/registration")
     public ResponseEntity<String> traderRegistration(@Valid @RequestBody ProductTrader productTrader){
         System.out.println("productTrader === " + productTrader);
         try{
-            traderService.traderRegistration(productTrader);
+            productTraderService.traderRegistration(productTrader);
             return ResponseEntity.ok("Продавец успешно зарегистрирован");
         } catch(ResponseException exception){
            return ResponseEntity.badRequest().body(exception.getMessage()
