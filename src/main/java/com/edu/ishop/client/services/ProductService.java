@@ -2,10 +2,7 @@ package com.edu.ishop.client.services;
 
 
 import com.edu.ishop.helpers.exceptions.ResponseException;
-import com.edu.ishop.helpers.repository.CategoryRepository;
-import com.edu.ishop.helpers.repository.FeedBackRepository;
-import com.edu.ishop.helpers.repository.ProductTraderRepository;
-import com.edu.ishop.helpers.repository.ProductRepository;
+import com.edu.ishop.helpers.repository.*;
 import com.edu.ishop.helpers.entity.*;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +11,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.beans.Encoder;
 import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -33,20 +32,24 @@ public class ProductService {
     ProductTraderRepository productManufactureRepository;
     CategoryService categoryService;
     CategoryRepository categoryRepository;
-
+    PasswordEncoder loginFormSecurityConfigurationEncoderPassword;
+    RoleRepository roleRepository;
     ProductTrader productTrader;
     FeedBackRepository feedBackRepository;
     FeedBack feedBack;
+    Encoder encoder;
 
     @Autowired
-    public ProductService(CategoryRepository categoryRepository, ProductTraderRepository productManufactureRepository, FeedBackRepository feedBackRepository, ProductRepository productRepository, CategoryService categoryService, List<Product> productList, FeedBack feedBack) {
+    public ProductService(RoleRepository roleRepository,PasswordEncoder loginFormSecurityConfigurationEncoderPassword,CategoryRepository categoryRepository, ProductTraderRepository productManufactureRepository, FeedBackRepository feedBackRepository, ProductRepository productRepository, CategoryService categoryService, List<Product> productList, FeedBack feedBack) {
         this.productRepository = productRepository;
         this.productManufactureRepository = productManufactureRepository;
         this.feedBackRepository = feedBackRepository;
         this.categoryService = categoryService;
         this.categoryRepository = categoryRepository;
+        this.roleRepository = roleRepository;
         this.productTrader = productTrader;
         this.feedBack = feedBack;
+        this.loginFormSecurityConfigurationEncoderPassword = loginFormSecurityConfigurationEncoderPassword;
     }
 
 
@@ -72,9 +75,24 @@ public class ProductService {
 
         ProductTrader productTrader1 = new ProductTrader("MilkCorp",
                 date2015,  new BigDecimal("4.789"), "MaxRate", "MSK", true);
+         productTrader1.setUserName("MilkCorp");
+         productTrader1.setPassword(loginFormSecurityConfigurationEncoderPassword.encode("12345"));
+         Role roleTrader = roleRepository.findByRoleType(Role.RoleType.ROLE_TRADER).orElseGet(()->{
+            Role traderRole = new Role();
+            traderRole.setRoleType(Role.RoleType.ROLE_TRADER);
+            Role traderRoleFromDBwithID = roleRepository.save(traderRole);
+            return traderRoleFromDBwithID;
+        });
+         productTrader1.setRole(roleTrader);
+
         productManufactureRepository.save(productTrader1);
         ProductTrader productTrader2 = new ProductTrader("Fermer",
                 date2010,  new BigDecimal("4.89"), "MaxRate", "MSK-SPB", true);
+
+        productTrader2.setUserName("Fermer");
+        productTrader2.setPassword(loginFormSecurityConfigurationEncoderPassword.encode("12345"));
+
+        productTrader2.setRole(roleTrader);
 
         productManufactureRepository.save(productTrader2);
         Customer customer = new Customer();
@@ -280,7 +298,7 @@ public class ProductService {
 
 
     public List<String> uploadProducts(MultipartFile file, String userNameTrader) throws ResponseException {
-       ProductTrader trader =  productManufactureRepository.findById(userNameTrader).orElse(null);
+       ProductTrader trader =  productManufactureRepository.findByUserName(userNameTrader).orElse(null);
       if(trader == null) throw new ResponseException("Продавец не зарегистрирован");
 
         boolean isUpload = uploadFile(file, userNameTrader);

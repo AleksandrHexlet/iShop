@@ -15,16 +15,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.EnumSet;
 import java.util.Set;
 
 @Service
 public class LoginDataDetailsService implements UserDetailsService {
-    private LoginDataRepository loginDataRepository;
+    private LoginDataRepository<LoginData> loginDataRepository;
     private RoleRepository roleRepository;
 
 
     @Autowired
-    public LoginDataDetailsService(LoginDataRepository loginDataRepository, RoleRepository repository) {
+    public LoginDataDetailsService(LoginDataRepository<LoginData> loginDataRepository, RoleRepository repository) {
         this.loginDataRepository = loginDataRepository;
         this.roleRepository = repository;
     }
@@ -32,7 +33,8 @@ public class LoginDataDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        LoginData loginData = loginDataRepository.findByUserName(username)
+        LoginData loginData = loginDataRepository
+                .findByUserNameAndRoleRoleTypeIn(username, EnumSet.of(Role.RoleType.ROLE_ADMIN, Role.RoleType.ROLE_READONLY_ADMIN))
                 .orElseThrow(() -> new UsernameNotFoundException(String
                         .format("Пользователь с именем %s не зарегистрирован", username)));
 

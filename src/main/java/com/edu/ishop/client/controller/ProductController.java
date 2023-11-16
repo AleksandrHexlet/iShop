@@ -76,7 +76,9 @@ public class ProductController {
                                                        @RequestParam String textFeedback,
                                                        @RequestParam String productTraderName,
                                                        @RequestParam String comments,
-                                                       @RequestParam int traderRate ) {
+                                                       @RequestParam int traderRate
+//    @RequestParam TraderRating traderRating
+    ) {
 
 
         FeedBack feedBack = productService.addFeedBackToProduct(idProduct, textFeedback);

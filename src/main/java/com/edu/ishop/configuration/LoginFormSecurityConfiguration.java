@@ -59,7 +59,6 @@ public class LoginFormSecurityConfiguration {
     }
 
 
-
     @Bean
     @Order(1)
     public SecurityFilterChain filterChainCustomer(HttpSecurity http) throws Exception {

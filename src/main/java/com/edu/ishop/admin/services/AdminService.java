@@ -21,14 +21,14 @@ import java.util.Map;
 @Validated
 public class AdminService {
     ProductRepositoryAdmin productRepositoryAdmin;
-    ProductTraderRepository productManufactureRepository;
+    ProductTraderRepository productTraderRepository;
     CategoryRepository categoryRepository;
     CustomerRepositoryAdmin customerRepositoryAdmin;
     ProductCustomerOrderRepository productCustomerOrderRepository;
     @Autowired
     public AdminService(ProductCustomerOrderRepository productCustomerOrderRepository, ProductRepositoryAdmin productRepositoryAdmin, ProductTraderRepository productManufactureRepository, CategoryRepository categoryRepository, CustomerRepositoryAdmin customerRepositoryAdmin) {
         this.productRepositoryAdmin = productRepositoryAdmin;
-        this.productManufactureRepository = productManufactureRepository;
+        this.productTraderRepository = productManufactureRepository;
         this.categoryRepository = categoryRepository;
         this.customerRepositoryAdmin = customerRepositoryAdmin;
     }
@@ -36,8 +36,8 @@ public class AdminService {
 
     public Product createNewProduct(@Valid Product product) throws ResponseException {
         product.setDateAdded(LocalDate.now());
-        ProductTrader productTrader = productManufactureRepository
-                .findById(product.getProductManufacturer().getUserName()).orElse(null);
+        ProductTrader productTrader = productTraderRepository
+                .findByUserName(product.getProductManufacturer().getUserName()).orElse(null);
         if (productTrader == null || !productTrader.isActive()) {
             throw new ResponseException("Товар не может быть добавлен. Производитель " +
                     "не существует ил не активен");
@@ -69,7 +69,7 @@ public class AdminService {
 
     public ProductTrader createNewTrader(@Valid ProductTrader productTrader) {
         productTrader.setDateRegistration(LocalDate.now());
-        productManufactureRepository.save(productTrader);
+        productTraderRepository.save(productTrader);
         return productTrader;
     }
 
@@ -79,13 +79,13 @@ public class AdminService {
             throw new ResponseException("userName должен быть заполнен");
         if ((cityStorage != null && cityStorage.isEmpty() && rate.equals("-1")) || (cityStorage == null && rate.equals("-1")))
             throw new ResponseException("Нужна информация для обновления. Сейчас данные не переданы");
-       ProductTrader productTrader =  productManufactureRepository.findById(userName).orElse(null);
+       ProductTrader productTrader =  productTraderRepository.findByUserName(userName).orElse(null);
        if(productTrader == null) throw new ResponseException("Продавец не зарегистрирован");
         if(productTrader.getCityStorage().equals(cityStorage) && productTrader.getRate() == rate)
             throw new ResponseException("Данные не требуют обновления.Они идентичны сохранённым в БД");
         if(!rate.equals("-1")) productTrader.setRate(rate);
         if(cityStorage != null) productTrader.setCityStorage(cityStorage);
-       productManufactureRepository.save(productTrader);
+        productTraderRepository.save(productTrader);
     }
 
     public  List<HistoryOrder>  getOrderTrader(String username, String typeFilter
