@@ -8,8 +8,7 @@ import java.util.List;
 
 public interface ProductCustomerOrderRepository  extends JpaRepository<ProductCustomerOrder, Integer> {
 
-    public List<ProductCustomerOrder> findByProductTraderUserName(String userName);
-
-
-    boolean existByProductIdAndProductTraderUserName(int productId, String userName);
+    List<ProductCustomerOrder> findByProductTraderUserName(String userName);
+    // existS не exist
+    boolean existsByProductIdAndProductTraderUserName(int productId, String userName);
 }

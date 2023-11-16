@@ -1,5 +1,7 @@
 package com.edu.ishop.client.services;
 
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.proc.BadJOSEException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -30,22 +33,31 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-
+        String customerHeader = request.getHeader("Customer");
         String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (customerHeader == null || authHeader == null || !authHeader.startsWith("Bearer")) {
             filterChain.doFilter(request, response);
             return;
         }
         String jwt = authHeader.substring(7);
-        String userName = jwtSecurityService.extractUsername(jwt);
+        String userName = null;
+        try {
+            userName = jwtSecurityService.getSubject(jwt);
+        } catch (BadJOSEException | ParseException | JOSEException e) {
+            throw new IOException(e);
+        }
         if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = customerDetailsService.loadUserByUsername(userName);
-            if (jwtSecurityService.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,
-                        null, userDetails.getAuthorities()
-                );
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+            try {
+                if (jwtSecurityService.isTokenValid(jwt, userDetails)) {
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,
+                            null, userDetails.getAuthorities()
+                    );
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+            } catch (BadJOSEException | ParseException | JOSEException e) {
+                throw new IOException(e);
             }
         }
         filterChain.doFilter(request, response);

@@ -26,8 +26,14 @@ public class TraderController {
             return ResponseEntity.ok("Продавец успешно зарегистрирован");
         } catch(ResponseException exception){
            return ResponseEntity.badRequest().body(exception.getMessage()
-                    + "Неверные данные для регистрации продавца");
+                    + " Неверные данные для регистрации продавца");
         }
+
+    }
+
+    @GetMapping("/v1/protected") // разделить запросы client api и ishop api
+    public String protectedResource(){
+        return "Protected resource";
 
     }
 

@@ -38,7 +38,7 @@ public class TraderRatingService {
         ProductTrader productTraderFromDB = productTraderRepository.findByUserName(traderRating.getProductTraderName()).orElse(null);
 //
         if (productTraderFromDB == null) return;
-        if (!productCustomerOrderRepository.existByProductIdAndProductTraderUserName(traderRating.getId(),
+        if (!productCustomerOrderRepository.existsByProductIdAndProductTraderUserName(traderRating.getId(),
                 traderRating.getProductTraderName())) return;
 
         int totalCountAllRatings = productTraderFromDB.getTotalCountAllRatings() + 1;
