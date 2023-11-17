@@ -9,6 +9,7 @@ import com.edu.ishop.helpers.repository.ProductCustomerOrderRepository;
 import com.edu.ishop.helpers.repository.ProductRepository;
 import com.edu.ishop.helpers.repository.ProductTraderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,7 @@ public class TraderRatingService {
     }
 
 // отдельный файл для потока и тут метод пометить как доступный для потока
+    @Async("taskExecutor")
     public void calculateTraderQualityIndex(TraderRating traderRating) {
         System.out.println("traderRating. name == " + traderRating.getProductTraderName());
         String[] wordsMarkers = new String[]{"Плох", "плох", "Опоздал", "опоздал", "Задерж", "задерж", "Обман", "обман"};
