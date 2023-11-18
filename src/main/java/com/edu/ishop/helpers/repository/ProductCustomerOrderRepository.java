@@ -11,5 +11,5 @@ public interface ProductCustomerOrderRepository  extends JpaRepository<ProductCu
     public List<ProductCustomerOrder> findByProductTraderUserName(String userName);
 
 
-boolean existByProductIdAndProductTraderUserName(int productId, String userName);
+boolean existsByProductIdAndProductTraderUserName(int productId, String userName);
 }

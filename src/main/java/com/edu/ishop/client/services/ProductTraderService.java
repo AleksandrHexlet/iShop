@@ -16,18 +16,15 @@ import java.time.LocalDate;
 @Service
 public class ProductTraderService {
     private ProductTraderRepository productTraderRepository;
-    private LoginDataRepository loginDataRepository;
     private RoleRepository roleRepository;
-    private LoginData loginDataTrader = new LoginData();
+
     private PasswordEncoder encoderPassword;
 
 @Autowired
     public ProductTraderService(ProductTraderRepository productTraderRepository,
-                                LoginDataRepository loginDataRepository,
                                 RoleRepository roleRepository,
                                 PasswordEncoder loginFormSecurityConfigurationEncoderPassword) {
         this.productTraderRepository = productTraderRepository;
-        this.loginDataRepository = loginDataRepository;
         this.roleRepository = roleRepository;
 
         this.encoderPassword = loginFormSecurityConfigurationEncoderPassword;
@@ -38,9 +35,9 @@ public class ProductTraderService {
         if (productTraderRepository.existsByUserName(productTrader.getName()))
             throw new ResponseException("Такой продавец уже зарегистрирован");
 
-        loginDataTrader.setUserName((productTrader
+        productTrader.setUserName((productTrader
                 .getName().trim()).strip());
-        loginDataTrader.setPassword(encoderPassword
+        productTrader.setPassword(encoderPassword
                 .encode(productTrader.getPassword().strip()));
         Role roleTrader = roleRepository.findByRoleType(Role.RoleType.ROLE_TRADER).orElseGet(()->{
             Role traderRole = new Role();
@@ -49,8 +46,7 @@ public class ProductTraderService {
                 return traderRoleFromDBwithID;
         });
         System.out.println("roleTrader === " + roleTrader.getRoleType().name());
-        loginDataTrader.setRole(roleTrader);
-        loginDataRepository.save(loginDataTrader);
+        productTrader.setRole(roleTrader);
         productTrader.setDateRegistration(LocalDate.now());
         productTraderRepository.save(productTrader);
     }
