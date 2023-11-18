@@ -27,8 +27,8 @@ public class ProductDeserialized  extends StdDeserializer<Product> {
         ProductTrader productTrader = new ProductTrader();
         Category category = new Category();
         JsonNode node = parser.getCodec().readTree(parser);
-        productTrader.setName(node.get("productManufacturerName").asText());
-        productTrader.setCityStorage(node.get("productManufacturerCity").asText());
+        productTrader.setName(node.get("productTraderName").asText());
+        productTrader.setCityStorage(node.get("productTraderCityStorage").asText());
         category.setId((Integer) node.get("categoryProductId").numberValue());
 
         product.setNameProduct(node.get("nameProduct").asText());

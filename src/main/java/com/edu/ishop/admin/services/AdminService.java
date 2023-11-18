@@ -31,6 +31,8 @@ public class AdminService {
         this.productTraderRepository = productManufactureRepository;
         this.categoryRepository = categoryRepository;
         this.customerRepositoryAdmin = customerRepositoryAdmin;
+        this.productCustomerOrderRepository = productCustomerOrderRepository;
+
     }
 
 

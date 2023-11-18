@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/product")
@@ -82,8 +83,9 @@ public class ProductController {
 
 
         FeedBack feedBack = productService.addFeedBackToProduct(idProduct, textFeedback);
-        TraderRating traderRating = new TraderRating( productTraderName,  comments, traderRate);
-        traderRatingService.calculateTraderQualityIndex(traderRating);
+        TraderRating traderRating = new TraderRating(productTraderName, comments, traderRate);
+        traderRatingService.calculateTraderQualityIndex(traderRating,idProduct);
+
         return new ResponseEntity<FeedBack>(feedBack, HttpStatus.CREATED);
     }
 

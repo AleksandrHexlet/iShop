@@ -17,7 +17,7 @@ import java.time.LocalDate;
 public class ProductTraderService {
     private ProductTraderRepository productTraderRepository;
     private RoleRepository roleRepository;
-    /*private LoginData loginDataTrader = new LoginData();*/
+
     private PasswordEncoder encoderPassword;
 
 @Autowired
@@ -35,10 +35,12 @@ public class ProductTraderService {
 
         System.out.println(productTrader.getUserName());
 
+
         // наполнять нужно того продавца, который пришёл, а не новую logindata
         // productTraderRepository сам сохраняет в обе таблицы
         productTrader.setUserName(productTrader.getUserName().strip()); // не getName, a getUserName
         productTrader.setPassword(encoderPassword.encode(productTrader.getPassword().strip()));
+
         Role roleTrader = roleRepository.findByRoleType(Role.RoleType.ROLE_TRADER).orElseGet(()->{
             Role traderRole = new Role();
             traderRole.setRoleType(Role.RoleType.ROLE_TRADER);
