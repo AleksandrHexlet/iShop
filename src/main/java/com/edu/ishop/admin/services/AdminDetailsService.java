@@ -19,13 +19,13 @@ import java.util.EnumSet;
 import java.util.Set;
 
 @Service
-public class LoginDataDetailsService implements UserDetailsService {
+public class AdminDetailsService implements UserDetailsService {
     private LoginDataRepository<LoginData> loginDataRepository;
     private RoleRepository roleRepository;
 
 
     @Autowired
-    public LoginDataDetailsService(LoginDataRepository<LoginData> loginDataRepository, RoleRepository repository) {
+    public AdminDetailsService(LoginDataRepository<LoginData> loginDataRepository, RoleRepository repository) {
         this.loginDataRepository = loginDataRepository;
         this.roleRepository = repository;
     }

@@ -7,9 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ProductCustomerOrderRepository  extends JpaRepository<ProductCustomerOrder, Integer> {
-
-    public List<ProductCustomerOrder> findByProductTraderUserName(String userName);
-
-
+List<ProductCustomerOrder> findByProductTraderUserName(String userName);
 boolean existsByProductIdAndProductTraderUserName(int productId, String userName);
+
 }

@@ -26,24 +26,26 @@ public class ProductTraderService {
                                 PasswordEncoder loginFormSecurityConfigurationEncoderPassword) {
         this.productTraderRepository = productTraderRepository;
         this.roleRepository = roleRepository;
-
         this.encoderPassword = loginFormSecurityConfigurationEncoderPassword;
     }
 
     public void traderRegistration(ProductTrader productTrader) throws ResponseException {
+        if (productTraderRepository.existsByUserName(productTrader.getUserName()))
+            throw new ResponseException("Такой продавец уже зарегистрирован.");
 
-        if (productTraderRepository.existsByUserName(productTrader.getName()))
-            throw new ResponseException("Такой продавец уже зарегистрирован");
+        System.out.println(productTrader.getUserName());
 
-        productTrader.setUserName((productTrader
-                .getName().trim()).strip());
-        productTrader.setPassword(encoderPassword
-                .encode(productTrader.getPassword().strip()));
+
+        // наполнять нужно того продавца, который пришёл, а не новую logindata
+        // productTraderRepository сам сохраняет в обе таблицы
+        productTrader.setUserName(productTrader.getUserName().strip()); // не getName, a getUserName
+        productTrader.setPassword(encoderPassword.encode(productTrader.getPassword().strip()));
+
         Role roleTrader = roleRepository.findByRoleType(Role.RoleType.ROLE_TRADER).orElseGet(()->{
             Role traderRole = new Role();
             traderRole.setRoleType(Role.RoleType.ROLE_TRADER);
              Role traderRoleFromDBwithID = roleRepository.save(traderRole);
-                return traderRoleFromDBwithID;
+             return traderRoleFromDBwithID;
         });
         System.out.println("roleTrader === " + roleTrader.getRoleType().name());
         productTrader.setRole(roleTrader);

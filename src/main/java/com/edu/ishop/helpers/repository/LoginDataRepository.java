@@ -9,8 +9,7 @@ import java.util.Optional;
 
 public interface LoginDataRepository <T extends LoginData> extends JpaRepository<T, Integer> {
     Optional<T> findByUserName(String userName);
-    public boolean existsByUserName(String userName);
-
-    public Optional<T> findByUserNameAndRoleRoleTypeIn(String userName, Collection<Role.RoleType> roleTypes);
+    boolean existsByUserName(String userName);
+    Optional<T> findByUserNameAndRoleRoleTypeIn(String userName, Collection<Role.RoleType> roleTypes);
 
 }

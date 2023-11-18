@@ -7,11 +7,14 @@ import com.edu.ishop.helpers.exceptions.ResponseException;
 import com.edu.ishop.helpers.repository.CustomerRepository;
 import com.edu.ishop.helpers.repository.RefreshTokenRepository;
 import com.edu.ishop.helpers.repository.RoleRepository;
+import com.nimbusds.jose.JOSEException;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -67,11 +70,16 @@ public class CustomerService {
         customerRepository.save(customer);
     }
 
-    public TokenResponse customerAuthorization(String userName, String password) {
+    public TokenResponse customerAuthorization(String userName, String password) throws ResponseException {
         Customer customer = customerRepository.findByUserName(userName).orElseThrow(() ->
                 new UsernameNotFoundException("Такого пользователя не существует"));
         CustomerUserDetails customerUserDetails = new CustomerUserDetails(customer);
-        String tokenGenerated = jwtSecurityService.generateToken(customerUserDetails);
+        String tokenGenerated = null;
+        try {
+            tokenGenerated = jwtSecurityService.generateToken(customerUserDetails);
+        } catch (JOSEException e) {
+            throw new ResponseException("Ошибка генерации токена. " + e.getMessage());
+        }
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(userName, password));
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -100,10 +108,19 @@ public class CustomerService {
         refreshTokenRepository.save(refreshTokenFromDB);
         System.out.println("new refreshToken == " + refreshTokenFromDB.getValue());
         CustomerUserDetails customerUserDetails = new CustomerUserDetails(refreshTokenFromDB.getCustomer());
-        String newTokenGenerated = jwtSecurityService.generateToken(customerUserDetails);
+        String newTokenGenerated = null;
+        try {
+            newTokenGenerated = jwtSecurityService.generateToken(customerUserDetails);
+        } catch (JOSEException e) {
+            throw new ResponseException("Ошибка генерации токена. " + e.getMessage());
+        }
 
         TokenResponse tokenResponse = new TokenResponse(newTokenGenerated,refreshTokenFromDB);
 
         return tokenResponse;
     }
+
+
+
+
 }

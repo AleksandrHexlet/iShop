@@ -34,12 +34,15 @@ public class CustomerController {
         return ResponseEntity.ok("Клиент сохранён успешно");
     }
 
-    ;
-
 
     @PostMapping("/authorization")
     public TokenResponse customerAuthorization(@RequestParam String userName, @RequestParam String password) {
-        TokenResponse tokenResponse = customerService.customerAuthorization(userName, password);
+        TokenResponse tokenResponse = null;
+        try {
+            tokenResponse = customerService.customerAuthorization(userName, password);
+        } catch (ResponseException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
         return tokenResponse;
     }
 

@@ -39,7 +39,8 @@ public class TraderRatingService {
 
             String[] wordsMarkers = new String[]{"Плох", "плох", "Опоздал", "опоздал", "Задерж", "задерж", "Обман", "обман"};
             ProductTrader productTraderFromDB = productTraderRepository.findByUserName(traderRating.getProductTraderName()).orElse(null);
-//
+
+
             if (productTraderFromDB == null) return;
             if (!productCustomerOrderRepository.existsByProductIdAndProductTraderUserName(idProduct,
                     traderRating.getProductTraderName())) return;
