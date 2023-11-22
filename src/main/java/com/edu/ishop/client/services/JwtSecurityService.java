@@ -56,6 +56,7 @@ public class JwtSecurityService {
 
     private void encrypt(JWEObject jweObject) throws JOSEException {
         jweObject.encrypt((JWEEncrypter) webApplicationContext.getBean("JWEEncrypter"));
+//        jweObject.encrypt((JWEEncrypter) webApplicationContext.getBean("JWEEncrypter"));
     }
 
     public String generateToken(CustomerUserDetails customerUserDetails) throws JOSEException {

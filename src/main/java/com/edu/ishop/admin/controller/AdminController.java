@@ -78,7 +78,7 @@ public class AdminController {
 
         try {
             adminService.updateTrader(userName, rate, cityStorage);
-            return new ResponseEntity<String> ("update success", HttpStatusCode.valueOf(204));
+            return new ResponseEntity<String> ("update success", HttpStatusCode.valueOf(201));
         } catch (ResponseException e) {
             throw new ResponseStatusException(HttpStatus.NOT_MODIFIED, e.getMessage());
         }

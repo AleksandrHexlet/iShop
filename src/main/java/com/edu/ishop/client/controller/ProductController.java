@@ -77,19 +77,22 @@ public class ProductController {
                                                        @RequestParam String textFeedback,
                                                        @RequestParam String productTraderName,
                                                        @RequestParam String comments,
-                                                       @RequestParam int traderRate
+                                                       @RequestParam int traderRate,
+                                                       @RequestParam int customerId
 //    @RequestParam TraderRating traderRating
     ) {
 
+        try {
+            FeedBack feedBack = productService.addFeedBackToProduct(idProduct, textFeedback, customerId);
+            TraderRating traderRating = new TraderRating(productTraderName, comments, traderRate);
+            traderRatingService.calculateTraderQualityIndex(traderRating, idProduct);
 
-        FeedBack feedBack = productService.addFeedBackToProduct(idProduct, textFeedback);
-        TraderRating traderRating = new TraderRating(productTraderName, comments, traderRate);
-        traderRatingService.calculateTraderQualityIndex(traderRating,idProduct);
-
-        return new ResponseEntity<FeedBack>(feedBack, HttpStatus.CREATED);
-    }
-
-    ;
+            return new ResponseEntity<FeedBack>(feedBack, HttpStatus.CREATED);
+        } catch (ResponseException responseException) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Передан Id продукта или Id покупателя которого нет");
+        }
+    };
 
     @GetMapping("/id/{productId}")
     public Product getProductWithFeedbacksById(@PathVariable int productId) {

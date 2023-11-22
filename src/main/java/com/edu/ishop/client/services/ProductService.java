@@ -32,6 +32,7 @@ public class ProductService {
     ProductTraderRepository productManufactureRepository;
     CategoryService categoryService;
     CategoryRepository categoryRepository;
+    CustomerRepository customerRepository;
     PasswordEncoder loginFormSecurityConfigurationEncoderPassword;
     RoleRepository roleRepository;
     ProductTrader productTrader;
@@ -40,9 +41,10 @@ public class ProductService {
     Encoder encoder;
 
     @Autowired
-    public ProductService(RoleRepository roleRepository,PasswordEncoder loginFormSecurityConfigurationEncoderPassword,CategoryRepository categoryRepository, ProductTraderRepository productManufactureRepository, FeedBackRepository feedBackRepository, ProductRepository productRepository, CategoryService categoryService, List<Product> productList, FeedBack feedBack) {
+    public ProductService(CustomerRepository customerRepository, RoleRepository roleRepository,PasswordEncoder loginFormSecurityConfigurationEncoderPassword,CategoryRepository categoryRepository, ProductTraderRepository productManufactureRepository, FeedBackRepository feedBackRepository, ProductRepository productRepository, CategoryService categoryService, List<Product> productList, FeedBack feedBack) {
         this.productRepository = productRepository;
         this.productManufactureRepository = productManufactureRepository;
+        this.customerRepository = customerRepository;
         this.feedBackRepository = feedBackRepository;
         this.categoryService = categoryService;
         this.categoryRepository = categoryRepository;
@@ -160,10 +162,11 @@ public class ProductService {
         return productRepository.getProductsByName(nameArr);
     }
 
-    public FeedBack addFeedBackToProduct(int id, String textFeedBack) {
-        Customer customer = new Customer();
-        Product product = productRepository.findById(id).orElse(null);
-        if (product == null) return null;
+    public FeedBack addFeedBackToProduct(int id, String textFeedBack, int customerId) throws ResponseException {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(()->new ResponseException("Не удалось найти клиента при добавлении отзыва"));
+        Product product = productRepository.findById(id)
+                .orElseThrow(()->new ResponseException("Не удалось найти товар при добавлении отзыва"));
         FeedBack feedBack = new FeedBack(textFeedBack, product, customer);
         product.setFeedbackToList(feedBack);
         feedBackRepository.save(feedBack);
