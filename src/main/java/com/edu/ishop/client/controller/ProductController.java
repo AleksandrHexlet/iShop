@@ -1,8 +1,10 @@
 package com.edu.ishop.client.controller;
 
+import com.edu.ishop.client.services.ShopingListService;
 import com.edu.ishop.client.services.TraderRatingService;
 import com.edu.ishop.helpers.entity.FeedBack;
 import com.edu.ishop.helpers.entity.Product;
+import com.edu.ishop.helpers.entity.ShopingList;
 import com.edu.ishop.helpers.entity.TraderRating;
 import com.edu.ishop.helpers.exceptions.ResponseException;
 import com.edu.ishop.client.services.ProductService;
@@ -23,11 +25,14 @@ import java.util.concurrent.ExecutionException;
 public class ProductController {
     private ProductService productService;
     private TraderRatingService traderRatingService;
+    private ShopingListService shopingListService;
 
     @Autowired
-    public ProductController(ProductService productService, TraderRatingService traderRatingService) {
+    public ProductController(ProductService productService, TraderRatingService traderRatingService,
+                             ShopingListService shopingListService) {
         this.productService = productService;
         this.traderRatingService = traderRatingService;
+        this.shopingListService = shopingListService;
     }
 
     @GetMapping("/category/{urlCategory}")
@@ -130,6 +135,17 @@ public class ProductController {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
         }
 
+    }
+
+    @PostMapping("/shopingList")
+    public List<ShopingList> getShopingList(@RequestParam int buget, @RequestParam String shopingList){
+        List<ShopingList> listShoping =  shopingListService.createShopingList( buget, shopingList);
+//      try{
+//
+//      } catch{
+//
+//        }
+        return listShoping;
     }
 
 

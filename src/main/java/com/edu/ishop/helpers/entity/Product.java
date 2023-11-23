@@ -146,6 +146,10 @@ public class Product {
         this.categoryProduct = categoryProduct;
     }
 
+    public ProductTrader getProductTrader() {
+        return productTrader;
+    }
+
     @Override
     public String toString() {
         return "Product{" +
